@@ -57,5 +57,16 @@ sub regen_README {
 
         # Read POD from Module.pm and write to README
         $parser->parse_from_file($_[0], 'README');
-    }
+    };
+    eval {
+        require Pod::Markdown;
+        
+        my $parser = Pod::Markdown->new();      
+
+        # Read POD from Module.pm and write to README
+        $parser->parse_from_file($_[0]);
+        open my $fh, '>', 'README.mk'
+            or die "Couldn't open 'README.mk': $!";
+        print $fh $parser->as_markdown;
+    };
 }
