@@ -25,6 +25,9 @@ WriteMakefile1(
 
 sub WriteMakefile1 {  #Written by Alexandr Ciornii, version 0.21. Added by eumm-upgrade.
     my %params=@_;
+    
+    regen_README( $params{VERSION_FROM} );
+    
     my $eumm_version=$ExtUtils::MakeMaker::VERSION;
     $eumm_version=eval $eumm_version;
     die "EXTRA_META is deprecated" if exists $params{EXTRA_META};
@@ -46,3 +49,24 @@ sub WriteMakefile1 {  #Written by Alexandr Ciornii, version 0.21. Added by eumm-
     WriteMakefile(%params);
 }
 
+sub regen_README {
+    eval {
+        require Pod::Readme;
+        
+        my $parser = Pod::Readme->new();      
+
+        # Read POD from Module.pm and write to README
+        $parser->parse_from_file($_[0], 'README');
+    };
+    eval {
+        require Pod::Markdown;
+        
+        my $parser = Pod::Markdown->new();      
+
+        # Read POD from Module.pm and write to README
+        $parser->parse_from_file($_[0]);
+        open my $fh, '>', 'README.mk'
+            or die "Couldn't open 'README.mk': $!";
+        print $fh $parser->as_markdown;
+    };
+}
