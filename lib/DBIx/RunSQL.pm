@@ -38,6 +38,10 @@ C<dsn>, C<user>, C<password> - DBI parameters for connecting to the DB
 
 =item *
 
+C<dbh> - a premade database handle to be used instead of C<dsn>
+
+=item *
+
 C<verbose> - print each SQL statement as it is run
 
 =back
@@ -49,8 +53,11 @@ sub create {
 
     $args{sql} ||= 'sql/create.sql';
 
-    my $dbh = DBI->connect($args{dsn}, $args{user}, $args{password}, {})
-        or die "Couldn't connect to '$args{dsn}' : " . DBI->errstr;
+    my $dbh = delete $args{ dbh };
+    if (! $dbh) {
+        $dbh = DBI->connect($args{dsn}, $args{user}, $args{password}, {})
+            or die "Couldn't connect to DSN '$args{dsn}' : " . DBI->errstr;
+    };
 
     $self->run_sql_file(
         sql => $args{sql},
