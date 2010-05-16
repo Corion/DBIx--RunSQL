@@ -65,8 +65,8 @@ sub regen_README {
 
         # Read POD from Module.pm and write to README
         $parser->parse_from_file($_[0]);
-        open my $fh, '>', 'README.mk'
-            or die "Couldn't open 'README.mk': $!";
+        open my $fh, '>', 'README.mkdn'
+            or die "Couldn't open 'README.mkdn': $!";
         print $fh $parser->as_markdown;
     };
 }
