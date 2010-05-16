@@ -11,6 +11,12 @@ DBIx::RunSQL - run SQL to create a database schema
 
 =cut
 
+=head1 SYNOPSIS
+
+  ...
+
+=head1 METHODS
+
 =head2 C<< DBIx::RunSQL->create ARGS >>
 
 Creates the database and returns the database handle
@@ -139,10 +145,64 @@ sub handle_command_line {
 
 1;
 
+=head1 PROGRAMMER USAGE
+
+This module abstracts away the "run these SQL statements to set up 
+your database" into a module. In some situations you want to give the
+setup SQL to a database admin, but in other situations, for example testing,
+you want to run the SQL statements against an in-memory database. This
+module abstracts away the reading of SQL from a file and allows for various
+command line parameters to be passed in. A skeleton C<create-db.sql>
+looks like this:
+
+    #!/usr/bin/perl -w
+    use strict;
+    use lib 'lib';
+    use DBIx::RunSQL;
+
+    DBIx::RunSQL->handle_command_line('myapp');
+
+    =head1 NAME
+
+    create-db.pl - Create the database
+
+    =head1 ABSTRACT
+
+    This sets up the database. The following
+    options are recognized:
+
+    =over 4
+
+    =item C<--user> USERNAME
+
+    =item C<--password> PASSWORD
+
+    =item C<--dsn> DSN
+
+    The DBI DSN to use for connecting to
+    the database
+
+    =item C<--sql> SQLFILE
+
+    The alternative SQL file to use
+    instead of C<sql/create.sql>.
+
+    =item C<--help>
+
+    Show this message.
+
+    =cut
+
 =head1 NOTES
 
 If you find yourself wanting to write SELECT statements,
 consider looking at L<Querylet> instead, which is geared towards that
 and even has an interface for Excel or HTML output.
+
+If you find yourself wanting to write parametrized queries as
+C<.sql> files, consider looking at L<Data::Phrasebook::SQL>
+or potentially L<DBIx::SQLHandler>.
+
+=head1
 
 =cut
