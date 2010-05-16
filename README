@@ -2,7 +2,18 @@ NAME
     DBIx::RunSQL - run SQL to create a database schema
 
 SYNOPSIS
-      ...
+        #!/usr/bin/perl -w
+        use strict;
+        use lib 'lib';
+        use DBIx::RunSQL;
+
+        my $test_dbh = DBIx::RunSQL->create(
+            dsn     => 'dbi:SQLite:dbfile=:memory:',
+            sql     => 'sql/setup.sql',
+            verbose => 1,
+        );
+    
+        ... # run your tests with a DB setup fresh from setup.sql
 
 METHODS
   `DBIx::RunSQL->create ARGS'
@@ -23,6 +34,8 @@ METHODS
           create table ...
 
     *   `dsn', `user', `password' - DBI parameters for connecting to the DB
+
+    *   `dbh' - a premade database handle to be used instead of `dsn'
 
     *   `verbose' - print each SQL statement as it is run
 
@@ -82,4 +95,6 @@ NOTES
     files, consider looking at Data::Phrasebook::SQL or potentially
     DBIx::SQLHandler.
 
+SEE ALSO
+    ORLite::Migrate
 
