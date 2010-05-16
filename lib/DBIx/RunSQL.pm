@@ -13,7 +13,18 @@ DBIx::RunSQL - run SQL to create a database schema
 
 =head1 SYNOPSIS
 
-  ...
+    #!/usr/bin/perl -w
+    use strict;
+    use lib 'lib';
+    use DBIx::RunSQL;
+
+    my $test_dbh = DBIx::RunSQL->create(
+        dsn     => 'dbi:SQLite:dbfile=:memory:',
+        sql     => 'sql/setup.sql',
+        verbose => 1,
+    );
+    
+    ... # run your tests with a DB setup fresh from setup.sql
 
 =head1 METHODS
 
@@ -82,7 +93,7 @@ sub run_sql_file {
         open my $fh, "<", $args{sql}
             or die "Couldn't read '$args{sql}' : $!";
         local $/;
-        @sql = split /;\n/, <$fh> # potentially this should become C<< $/ = ";\n"; >>
+        @sql = split /;\n/, <$fh> # XXX potentially this should become C<< $/ = ";\n"; >>
         # and a while loop to handle large SQL files
     };
 
@@ -210,6 +221,8 @@ If you find yourself wanting to write parametrized queries as
 C<.sql> files, consider looking at L<Data::Phrasebook::SQL>
 or potentially L<DBIx::SQLHandler>.
 
-=head1
+=head1 SEE ALSO
+
+L<ORLite::Migrate>
 
 =cut
