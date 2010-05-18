@@ -1,0 +1,4 @@
+cpan_user CORION
+sf_user <none>
+passive_ftp yes
+skip_kwalitee 1
