@@ -1,2 +1,6 @@
+0.03 To be released
+    . ->create now returns the database handle so you can use it
+      to create :memory: databases in SQLite
+
 0.02 20100213
     . Collected from various copies and released
