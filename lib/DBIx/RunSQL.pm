@@ -93,7 +93,7 @@ sub run_sql_file {
         open my $fh, "<", $args{sql}
             or die "Couldn't read '$args{sql}' : $!";
         local $/;
-        @sql = split /;\n/, <$fh> # XXX potentially this should become C<< $/ = ";\n"; >>
+        @sql = split /;\n/, <$fh> # potentially this should become C<< $/ = ";\n"; >>
         # and a while loop to handle large SQL files
     };
 
