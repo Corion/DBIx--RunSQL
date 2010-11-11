@@ -146,8 +146,6 @@ sub parse_command_line {
 
 sub handle_command_line {
     my ($package,$appname,@argv) =  @_;
-    require Getopt::Long; Getopt::Long->import();
-    require Pod::Usage; Pod::Usage->import();
     
     my $opts = $package->parse_command_line(@argv)
         or pod2usage(2);
@@ -210,6 +208,25 @@ looks like this:
     Show this message.
 
     =cut
+
+=head2 C<< DBIx::RunSQL->handle_command_line >>
+
+Parses the command line. This is a convenience method, which
+passes the following command line arguments to C<< ->create >>:
+
+  --user
+  --password
+  --dsn
+  --sql
+  --verbose
+
+In addition, it handles the following switches through L<Pod::Usage>:
+
+  --help
+  --man
+
+See also the section PROGRAMMER USAGE for a sample program to set
+up a database from an SQL file.
 
 =head1 NOTES
 
