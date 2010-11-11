@@ -46,7 +46,7 @@ be read until exhaustion.  B<not implemented>
 
 This allows to create SQL-as-programs as follows:
 
-  #!/usr/bin/perl -w -MDBIx::RunSQL=run
+  #!/usr/bin/perl -w -MDBIx::RunSQL=create
   create table ...
 
 =item *
