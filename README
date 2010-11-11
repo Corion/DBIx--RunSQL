@@ -30,7 +30,7 @@ METHODS
 
         This allows to create SQL-as-programs as follows:
 
-          #!/usr/bin/perl -w -MDBIx::RunSQL=run
+          #!/usr/bin/perl -w -MDBIx::RunSQL=create
           create table ...
 
     *   `dsn', `user', `password' - DBI parameters for connecting to the DB
@@ -86,6 +86,25 @@ PROGRAMMER USAGE
 
         =cut
 
+  `DBIx::RunSQL->handle_command_line'
+
+    Parses the command line. This is a convenience method, which passes the
+    following command line arguments to `->create':
+
+      --user
+      --password
+      --dsn
+      --sql
+      --verbose
+
+    In addition, it handles the following switches through Pod::Usage:
+
+      --help
+      --man
+
+    See also the section PROGRAMMER USAGE for a sample program to set up a
+    database from an SQL file.
+
 NOTES
     If you find yourself wanting to write SELECT statements, consider
     looking at Querylet instead, which is geared towards that and even has
@@ -97,4 +116,13 @@ NOTES
 
 SEE ALSO
     ORLite::Migrate
+
+AUTHOR
+    Max Maischein `corion@cpan.org'
+
+COPYRIGHT (c)
+    Copyright 2009-2010 by Max Maischein `corion@cpan.org'.
+
+LICENSE
+    This module is released under the same terms as Perl itself.
 
