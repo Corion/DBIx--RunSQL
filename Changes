@@ -1,3 +1,7 @@
+0.04 To be released
+    . Actually document ->handle_command_line, thanks to Terrence Brannon
+    . Add author information, license information
+
 0.03 20100518
     . ->create now returns the database handle so you can use it
       to create :memory: databases in SQLite
