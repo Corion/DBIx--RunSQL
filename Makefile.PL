@@ -9,6 +9,8 @@ WriteMakefile1(
     META_MERGE => {
         resources => {
             repository => 'http://github.com/Corion/dbix--runsql',
+            bugtracker => 'http://rt.cpan.org/Public/Dist/Display.html?Name=DBIx-RunSQL',
+            license    => *http://dev.perl.org/licenses/',
         },
     },
     'NAME'          => 'DBIx::RunSQL',

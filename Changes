@@ -2,6 +2,7 @@
     . Fix synopsis to use :dbname instead of (wrong) :dbfile parameter
       for DBD::SQLite
     . Added link to github repo
+    . Added metainformation about bugtracker etc.
     . Bumped copyright
 
 0.04 20101111
