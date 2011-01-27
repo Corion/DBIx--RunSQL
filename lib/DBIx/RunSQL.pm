@@ -3,7 +3,7 @@ use strict;
 use DBI;
 
 use vars qw($VERSION);
-$VERSION = '0.04';
+$VERSION = '0.05';
 
 =head1 NAME
 
@@ -19,7 +19,7 @@ DBIx::RunSQL - run SQL to create a database schema
     use DBIx::RunSQL;
 
     my $test_dbh = DBIx::RunSQL->create(
-        dsn     => 'dbi:SQLite:dbfile=:memory:',
+        dsn     => 'dbi:SQLite:dbname=:memory:',
         sql     => 'sql/setup.sql',
         verbose => 1,
     );
@@ -242,7 +242,21 @@ or potentially L<DBIx::SQLHandler>.
 
 L<ORLite::Migrate>
 
-=cut
+=head1 REPOSITORY
+
+The public repository of this module is 
+L<http://github.com/Corion/DBIx--RunSQL>.
+
+=head1 SUPPORT
+
+The public support forum of this module is
+L<http://perlmonks.org/>.
+
+=head1 BUG TRACKER
+
+Please report bugs in this module via the RT CPAN bug queue at
+L<https://rt.cpan.org/Public/Dist/Display.html?Name=DBIx-RunSQL>
+or via mail to L<dbix-runsql-Bugs@rt.cpan.org>.
 
 =head1 AUTHOR
 
@@ -250,7 +264,7 @@ Max Maischein C<corion@cpan.org>
 
 =head1 COPYRIGHT (c)
 
-Copyright 2009-2010 by Max Maischein C<corion@cpan.org>.
+Copyright 2009-2011 by Max Maischein C<corion@cpan.org>.
 
 =head1 LICENSE
 
