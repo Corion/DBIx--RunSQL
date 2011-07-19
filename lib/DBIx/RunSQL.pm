@@ -3,7 +3,7 @@ use strict;
 use DBI;
 
 use vars qw($VERSION);
-$VERSION = '0.05';
+$VERSION = '0.06';
 
 =head1 NAME
 
@@ -61,6 +61,14 @@ C<dbh> - a premade database handle to be used instead of C<dsn>
 
 C<verbose> - print each SQL statement as it is run
 
+=item *
+
+C<verbose_handler> - callback to call with each SQL statement instead of C<print>
+
+=item *
+
+C<verbose_fh> - filehandle to write to instead of C<STDOUT>
+
 =back
 
 =cut
@@ -75,11 +83,17 @@ sub create {
         $dbh = DBI->connect($args{dsn}, $args{user}, $args{password}, {})
             or die "Couldn't connect to DSN '$args{dsn}' : " . DBI->errstr;
     };
+    
+    if (! $args{ verbose_handler }) {
+        $args{ verbose_fh } ||= \*main::STDOUT;
+        $args{ verbose_handler } = sub {
+            print { $args{ verbose_fh } } "$_[0]\n";
+        };
+    };
 
     $self->run_sql_file(
-        sql => $args{sql},
         dbh => $dbh,
-        verbose => $args{verbose}
+        %args,
     );
 
     $dbh
@@ -96,11 +110,20 @@ sub run_sql_file {
         @sql = split /;\n/, <$fh> # potentially this should become C<< $/ = ";\n"; >>
         # and a while loop to handle large SQL files
     };
+    
+    $args{ verbose_handler } ||= sub {
+        if ($args{ verbose }) {
+            $args{ verbose_fh } ||= \*main::STDOUT;
+            print { $args{ verbose_fh } } "--\n$_[0]\n";
+        };
+    };
+    my $status = delete $args{ verbose_handler };
 
     for my $statement (@sql) {
         $statement =~ s/^\s*--.*$//mg;
         next unless $statement =~ /\S/; # skip empty lines
-        print "$statement\n" if $args{verbose};
+        
+        $status->($statement);
         if (! $args{dbh}->do($statement)) {
             $errors++;
             if ($args{fatal}) {

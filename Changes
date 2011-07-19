@@ -1,3 +1,9 @@
+0.06 to be released
+    Suggested by Gabor Szabo
+    . allow a different output handle for the verbose messages
+    . Allow a callback for the verbose messages
+    . Separate the SQL statements by "--" in the verbose output
+
 0.05 20110127
     . Fix synopsis to use :dbname instead of (wrong) :dbfile parameter
       for DBD::SQLite
