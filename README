@@ -43,6 +43,30 @@ METHODS
 
     *   `verbose_fh' - filehandle to write to instead of `STDOUT'
 
+  `DBIx::RunSQL->run_sql_file ARGS'
+        my $dbh = DBI->connect(...)
+    
+        for my $file (sort glob '*.sql') {
+            DBIx::RunSQL->run_sql_file(
+                verbose => 1,
+                dbh => $dbh,
+                sql => $file,
+            );
+        };
+
+    Runs an SQL file on a prepared database handle.
+
+    *   `dbh' - a premade database handle
+
+    *   `sql' - name of the file containing the SQL statements
+
+    *   `verbose' - print each SQL statement as it is run
+
+    *   `verbose_handler' - callback to call with each SQL statement instead
+        of `print'
+
+    *   `verbose_fh' - filehandle to write to instead of `STDOUT'
+
 PROGRAMMER USAGE
     This module abstracts away the "run these SQL statements to set up your
     database" into a module. In some situations you want to give the setup
