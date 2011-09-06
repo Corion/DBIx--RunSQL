@@ -99,6 +99,46 @@ sub create {
     $dbh
 };
 
+=head2 C<< DBIx::RunSQL->run_sql_file ARGS >>
+
+    my $dbh = DBI->connect(...)
+    
+    for my $file (sort glob '*.sql') {
+        DBIx::RunSQL->run_sql_file(
+            verbose => 1,
+            dbh => $dbh,
+            sql => $file,
+        );
+    };
+
+Runs an SQL file on a prepared database handle.
+
+=over 4
+
+=item *
+
+C<dbh> - a premade database handle
+
+=item *
+
+C<sql> - name of the file containing the SQL statements
+
+=item *
+
+C<verbose> - print each SQL statement as it is run
+
+=item *
+
+C<verbose_handler> - callback to call with each SQL statement instead of C<print>
+
+=item *
+
+C<verbose_fh> - filehandle to write to instead of C<STDOUT>
+
+=back
+
+=cut
+
 sub run_sql_file {
     my ($class,%args) = @_;
     my $errors = 0;
