@@ -7,6 +7,7 @@ MANIFEST.skip
 README
 README.mkdn
 t/00-use.t
+t/01-force.t
 t/99-changes.t
 t/99-manifest.t
 t/99-pod.t

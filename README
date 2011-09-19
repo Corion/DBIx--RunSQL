@@ -10,6 +10,7 @@ SYNOPSIS
         my $test_dbh = DBIx::RunSQL->create(
             dsn     => 'dbi:SQLite:dbname=:memory:',
             sql     => 'sql/setup.sql',
+            force   => 1,
             verbose => 1,
         );
     
@@ -36,6 +37,8 @@ METHODS
 
     *   `dbh' - a premade database handle to be used instead of `dsn'
 
+    *   `force' - continue even if errors are encountered
+
     *   `verbose' - print each SQL statement as it is run
 
     *   `verbose_handler' - callback to call with each SQL statement instead
@@ -49,8 +52,8 @@ METHODS
         for my $file (sort glob '*.sql') {
             DBIx::RunSQL->run_sql_file(
                 verbose => 1,
-                dbh => $dbh,
-                sql => $file,
+                dbh     => $dbh,
+                sql     => $file,
             );
         };
 
@@ -59,6 +62,8 @@ METHODS
     *   `dbh' - a premade database handle
 
     *   `sql' - name of the file containing the SQL statements
+
+    *   `force' - continue even if errors are encountered
 
     *   `verbose' - print each SQL statement as it is run
 
