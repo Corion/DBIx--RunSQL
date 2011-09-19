@@ -106,8 +106,8 @@ sub create {
     for my $file (sort glob '*.sql') {
         DBIx::RunSQL->run_sql_file(
             verbose => 1,
-            dbh => $dbh,
-            sql => $file,
+            dbh     => $dbh,
+            sql     => $file,
         );
     };
 
