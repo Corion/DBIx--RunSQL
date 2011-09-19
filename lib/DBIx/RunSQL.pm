@@ -21,6 +21,7 @@ DBIx::RunSQL - run SQL to create a database schema
     my $test_dbh = DBIx::RunSQL->create(
         dsn     => 'dbi:SQLite:dbname=:memory:',
         sql     => 'sql/setup.sql',
+        force   => 1,
         verbose => 1,
     );
     
@@ -56,6 +57,10 @@ C<dsn>, C<user>, C<password> - DBI parameters for connecting to the DB
 =item *
 
 C<dbh> - a premade database handle to be used instead of C<dsn>
+
+=item *
+
+C<force> - continue even if errors are encountered
 
 =item *
 
@@ -125,6 +130,10 @@ C<sql> - name of the file containing the SQL statements
 
 =item *
 
+C<force> - continue even if errors are encountered
+
+=item *
+
 C<verbose> - print each SQL statement as it is run
 
 =item *
@@ -166,7 +175,7 @@ sub run_sql_file {
         $status->($statement);
         if (! $args{dbh}->do($statement)) {
             $errors++;
-            if ($args{fatal}) {
+            if (!$args{force}) {
                 die "[SQL ERROR]: $statement\n";
             } else {
                 warn "[SQL ERROR]: $statement\n";
@@ -189,6 +198,7 @@ sub parse_command_line {
         'password:s' => \my $password,
         'dsn:s' => \my $dsn,
         'verbose' => \my $verbose,
+        'force|f' => \my $force,
         'sql:s' => \my $sql,
         'help|h' => \my $help,
         'man' => \my $man,
@@ -198,6 +208,7 @@ sub parse_command_line {
         password => $password,
         dsn      => $dsn,
         verbose  => $verbose,
+        force    => $force,
         sql      => $sql,
         help     => $help,
         man      => $man,
