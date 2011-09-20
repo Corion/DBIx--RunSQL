@@ -1,10 +1,10 @@
-0.06 to be released
+0.06 20110920
     Suggested by Gabor Szabo
     + allow a different output handle for the verbose messages
     + Allow a callback for the verbose messages
     + Separate the SQL statements by "--" in the verbose output
     ! SQL errors are now fatal
-    + Add --force option to ignore SQL errors
+    + Add --force option to ignore SQL errors (fixes RT #70998)
 
 0.05 20110127
     . Fix synopsis to use :dbname instead of (wrong) :dbfile parameter
