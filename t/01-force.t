@@ -21,7 +21,7 @@ if ($can_run) {
     ok !$lives, "We die on invalid SQL";
     isn't $@, '', "We die with some error message";
 
-    my $lives = eval {
+    $lives = eval {
         my $test_dbh = DBIx::RunSQL->create(
             dsn     => 'dbi:SQLite:dbname=:memory:',
             sql     => $0,
@@ -29,11 +29,11 @@ if ($can_run) {
         );
         1;
     };
-    my $err = $@;
+    $err = $@;
     ok $lives, "We can force invalid SQL";
     is $@, '', "We don't die with some error message";
 } else {
     SKIP: {
-        skip "SQLite not installed", 2
+        skip "SQLite not installed", 4
     }
 }
