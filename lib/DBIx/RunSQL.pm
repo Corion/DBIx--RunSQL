@@ -279,6 +279,10 @@ looks like this:
     The alternative SQL file to use
     instead of C<sql/create.sql>.
 
+    =item C<--force>
+
+    Don't stop on errors
+
     =item C<--help>
 
     Show this message.
@@ -294,6 +298,7 @@ passes the following command line arguments to C<< ->create >>:
   --password
   --dsn
   --sql
+  --force
   --verbose
 
 In addition, it handles the following switches through L<Pod::Usage>:
