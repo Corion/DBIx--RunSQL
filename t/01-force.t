@@ -1,6 +1,6 @@
 #!perl -w
 use strict;
-use Test::More tests => 4;
+use Test::More tests => 5;
 
 use DBIx::RunSQL;
 
@@ -10,6 +10,8 @@ my $can_run = eval {
 };
 
 if ($can_run) {
+    my $warn;
+    local $SIG{__WARN__} = sub { $warn = shift };
     my $lives = eval {
         my $test_dbh = DBIx::RunSQL->create(
             dsn     => 'dbi:SQLite:dbname=:memory:',
@@ -32,6 +34,7 @@ if ($can_run) {
     $err = $@;
     ok $lives, "We can force invalid SQL";
     is $@, '', "We don't die with some error message";
+    like $warn, qr/SQL ERROR/, "We still warn about SQL errors";
 } else {
     SKIP: {
         skip "SQLite not installed", 4
