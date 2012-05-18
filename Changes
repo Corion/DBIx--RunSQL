@@ -1,8 +1,15 @@
+0.08 20120518
+    . Add a test for warnings raised while executing SQL
+      (contributed by David Golden)
+    + Respect the 'verbose' setting, fixes RT #77260
+      (contributed by David Golden)
+
 0.07 20111023
     . Fix bad test skip count
     . Documentation fixes
     o no need to upgrade
-0.06 20110920
+
+0.06 20110920
     Suggested by Gabor Szabo
     + allow a different output handle for the verbose messages
     + Allow a callback for the verbose messages
