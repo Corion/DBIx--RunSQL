@@ -9,7 +9,7 @@ SYNOPSIS
 
         my $test_dbh = DBIx::RunSQL->create(
             dsn     => 'dbi:SQLite:dbname=:memory:',
-            sql     => 'sql/setup.sql',
+            sql     => 'sql/create.sql',
             force   => 1,
             verbose => 1,
         );
@@ -21,6 +21,8 @@ METHODS
     Creates the database and returns the database handle
 
     *   `sql' - name of the file containing the SQL statements
+
+        The default is `sql/create.sql'
 
         If `sql' is a reference to a glob or a filehandle, the SQL will be
         read from that. not implemented
@@ -113,6 +115,10 @@ PROGRAMMER USAGE
         The alternative SQL file to use
         instead of C<sql/create.sql>.
 
+        =item C<--force>
+
+        Don't stop on errors
+
         =item C<--help>
 
         Show this message.
@@ -127,6 +133,7 @@ PROGRAMMER USAGE
       --password
       --dsn
       --sql
+      --force
       --verbose
 
     In addition, it handles the following switches through Pod::Usage:
