@@ -91,13 +91,6 @@ sub create {
             or die "Couldn't connect to DSN '$args{dsn}' : " . DBI->errstr;
     };
     
-    if (! $args{ verbose_handler }) {
-        $args{ verbose_fh } ||= \*main::STDOUT;
-        $args{ verbose_handler } = sub {
-            print { $args{ verbose_fh } } "$_[0]\n";
-        };
-    };
-
     $self->run_sql_file(
         dbh => $dbh,
         %args,
@@ -163,10 +156,8 @@ sub run_sql_file {
     };
     
     $args{ verbose_handler } ||= sub {
-        if ($args{ verbose }) {
-            $args{ verbose_fh } ||= \*main::STDOUT;
-            print { $args{ verbose_fh } } "--\n$_[0]\n";
-        };
+        $args{ verbose_fh } ||= \*main::STDOUT;
+        print { $args{ verbose_fh } } "$_[0]\n";
     };
     my $status = delete $args{ verbose_handler };
 
@@ -174,7 +165,7 @@ sub run_sql_file {
         $statement =~ s/^\s*--.*$//mg;
         next unless $statement =~ /\S/; # skip empty lines
         
-        $status->($statement);
+        $status->($statement) if $args{verbose};
         if (! $args{dbh}->do($statement)) {
             $errors++;
             if (!$args{force}) {
