@@ -1,6 +1,6 @@
 #!perl -w
 use strict;
-use Test::More tests => 5;
+use Test::More;
 
 use DBIx::RunSQL;
 
@@ -10,6 +10,7 @@ my $can_run = eval {
 };
 
 if ($can_run) {
+	plan tests => 5;
     my $warn;
     local $SIG{__WARN__} = sub { $warn = shift };
     my $lives = eval {
@@ -36,7 +37,5 @@ if ($can_run) {
     is $@, '', "We don't die with some error message";
     like $warn, qr/SQL ERROR/, "We still warn about SQL errors";
 } else {
-    SKIP: {
-        skip "SQLite not installed", 4
-    }
+    plan skip_all => "SQLite not installed";
 }
