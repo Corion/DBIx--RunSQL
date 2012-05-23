@@ -328,7 +328,7 @@ L<http://perlmonks.org/>.
 
 Please report bugs in this module via the RT CPAN bug queue at
 L<https://rt.cpan.org/Public/Dist/Display.html?Name=DBIx-RunSQL>
-or via mail to L<dbix-runsql-Bugs@rt.cpan.org>.
+or via mail to L<bug-dbix-runsql@rt.cpan.org>.
 
 =head1 AUTHOR
 
