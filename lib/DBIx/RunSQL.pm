@@ -165,8 +165,8 @@ sub run_sql_file {
     # we need to reconstruct multi-line CREATE TRIGGER statements here again
     my $trigger;
     for my $statement (@sql) {
-        $statement =~ s/^\s*--.*$//mg;
-        next unless $statement =~ /\S/; # skip empty lines
+        # skip "statements" that consist only of comments
+        next unless $statement =~ /^\s*[A-Z][A-Z]/mi;
         
         if( $statement =~ /^\s*CREATE\s+TRIGGER\b/i ) {
             $trigger = $statement;
@@ -318,6 +318,12 @@ See also the section PROGRAMMER USAGE for a sample program to set
 up a database from an SQL file.
 
 =head1 NOTES
+
+=head2 COMMENT FILTERING
+
+The module tries to keep the SQL as much verbatim as possible. It
+filters all lines that end in semicolons but contain only SQL comments. All
+other comments are passed through to the database with the next statement.
 
 =head2 TRIGGER HANDLING
 
