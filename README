@@ -145,6 +145,26 @@ PROGRAMMER USAGE
     database from an SQL file.
 
 NOTES
+  COMMENT FILTERING
+    The module tries to keep the SQL as much verbatim as possible. It
+    filters all lines that end in semicolons but contain only SQL comments.
+    All other comments are passed through to the database with the next
+    statement.
+
+  TRIGGER HANDLING
+    This module uses a very simplicistic approach to recognize triggers.
+    Triggers are problematic because they consist of multiple SQL statements
+    and this module does not implement a full SQL parser. An trigger is
+    recognized by the following sequence of lines
+
+        CREATE TRIGGER
+            ...
+        END;
+
+    If your SQL dialect uses a different syntax, it might still work to put
+    the whole trigger on a single line in the input file.
+
+  OTHER APPROACHES
     If you find yourself wanting to write SELECT statements, consider
     looking at Querylet instead, which is geared towards that and even has
     an interface for Excel or HTML output.
@@ -166,7 +186,7 @@ SUPPORT
 BUG TRACKER
     Please report bugs in this module via the RT CPAN bug queue at
     https://rt.cpan.org/Public/Dist/Display.html?Name=DBIx-RunSQL or via
-    mail to dbix-runsql-Bugs@rt.cpan.org.
+    mail to bug-dbix-runsql@rt.cpan.org.
 
 AUTHOR
     Max Maischein `corion@cpan.org'
