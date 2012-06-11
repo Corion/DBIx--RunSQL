@@ -8,9 +8,15 @@ README
 README.mkdn
 t/00-use.t
 t/01-force.t
+t/02-trigger.sql
+t/02-trigger.t
+t/03-comment.t
 t/99-changes.t
 t/99-manifest.t
 t/99-pod.t
 t/99-todo.t
 t/99-unix-text.t
 t/99-versions.t
+t/rt77378.sql
+t/rt77378.t
+t/trigger.sql

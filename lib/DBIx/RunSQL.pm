@@ -161,9 +161,26 @@ sub run_sql_file {
     };
     my $status = delete $args{ verbose_handler };
 
+    # Because we blindly split above on /;\n/
+    # we need to reconstruct multi-line CREATE TRIGGER statements here again
+    my $trigger;
     for my $statement (@sql) {
         $statement =~ s/^\s*--.*$//mg;
         next unless $statement =~ /\S/; # skip empty lines
+        
+        if( $statement =~ /^\s*CREATE\s+TRIGGER\b/i ) {
+            $trigger = $statement;
+            next
+                if( $statement !~ /END$/i );
+            $statement = $trigger;
+            undef $trigger;
+        } elsif( $trigger ) {
+            $trigger .= ";\n$statement";
+            next
+                if( $statement !~ /END$/i );
+            $statement = $trigger;
+            undef $trigger;
+        };
         
         $status->($statement) if $args{verbose};
         if (! $args{dbh}->do($statement)) {
@@ -301,6 +318,22 @@ See also the section PROGRAMMER USAGE for a sample program to set
 up a database from an SQL file.
 
 =head1 NOTES
+
+=head2 TRIGGER HANDLING
+
+This module uses a very simplicistic approach to recognize triggers.
+Triggers are problematic because they consist of multiple SQL statements
+and this module does not implement a full SQL parser. An trigger is
+recognized by the following sequence of lines
+
+    CREATE TRIGGER
+        ...
+    END;
+
+If your SQL dialect uses a different syntax, it might still work to put
+the whole trigger on a single line in the input file.
+
+=head2 OTHER APPROACHES
 
 If you find yourself wanting to write SELECT statements,
 consider looking at L<Querylet> instead, which is geared towards that

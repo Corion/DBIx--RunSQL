@@ -1,3 +1,7 @@
+0.09 20120611
+    + Parse triggers. This fixes RT #77378
+      Test and report by Gabor Szabo
+
 0.08 20120518
     . Add a test for warnings raised while executing SQL
       (contributed by David Golden)
