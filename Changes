@@ -1,3 +1,8 @@
+0.10 20130510
+    . Fix the MANIFEST which listed MYMETA.*
+    . Fix a bug where ->handle_command_line() never properly processed
+      the parameters given to it.
+
 0.09 20120611
     + Parse triggers. This fixes RT #77378
       Test and report by Gabor Szabo
