@@ -231,7 +231,7 @@ sub parse_command_line {
 sub handle_command_line {
     my ($package,$appname,@argv) =  @_;
     
-    my $opts = $package->parse_command_line(@argv)
+    my $opts = $package->parse_command_line($appname,@argv)
         or pod2usage(2);
     pod2usage(1) if $opts->{help};
     pod2usage(-verbose => 2) if $opts->{man};
