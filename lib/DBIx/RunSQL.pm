@@ -120,6 +120,10 @@ sub create {
     };
 
 Runs an SQL file on a prepared database handle.
+Returns the number of errors encountered.
+
+If the statement returns rows, these are printed
+separated with tabs.
 
 =over 4
 
@@ -191,12 +195,33 @@ sub run_sql_file {
         };
         
         $status->($statement) if $args{verbose};
-        if (! $args{dbh}->do($statement)) {
-            $errors++;
+
+        my $sth = $args{dbh}->prepare($statement);
+        if(! $sth) {
             if (!$args{force}) {
                 die "[SQL ERROR]: $statement\n";
             } else {
                 warn "[SQL ERROR]: $statement\n";
+            };
+        } else {
+            my $status= $sth->execute();
+            if(! $status) {
+                if (!$args{force}) {
+                    die "[SQL ERROR]: $statement\n";
+                } else {
+                    warn "[SQL ERROR]: $statement\n";
+                };
+            } elsif( 0 < $sth->{NUM_OF_FIELDS} ) {
+                # SELECT statement, output results
+                my @columns= @{ $sth->{NAME} };
+
+                my $res= $sth->fetchall_arrayref( {} );
+                if( @columns ) {
+                    print join( "\t", @columns )."\n";
+                    for( @$res ) {
+                        print join( "\t", @{$_}{ @columns } )."\n";
+                    };
+                };
             };
         };
     };
