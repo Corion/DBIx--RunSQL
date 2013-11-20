@@ -1,3 +1,6 @@
+0.11 20131120
+    + Add functionality for SELECT statements
+
 0.10 20130510
     . Fix the MANIFEST which listed MYMETA.*
     . Fix a bug where ->handle_command_line() never properly processed
