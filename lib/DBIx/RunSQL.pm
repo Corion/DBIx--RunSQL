@@ -7,7 +7,7 @@ $VERSION = '0.10';
 
 =head1 NAME
 
-DBIx::RunSQL - run SQL to create a database schema
+DBIx::RunSQL - run SQL from a file
 
 =cut
 
@@ -31,7 +31,9 @@ DBIx::RunSQL - run SQL to create a database schema
 
 =head2 C<< DBIx::RunSQL->create ARGS >>
 
-Creates the database and returns the database handle
+=head2 C<< DBIx::RunSQL->run ARGS >>
+
+Runs the SQL commands and returns the database handle
 
 =over 4
 
@@ -51,6 +53,11 @@ This allows to create SQL-as-programs as follows:
 
   #!/usr/bin/perl -w -MDBIx::RunSQL=create
   create table ...
+
+If you want to run SQL statements from a scalar,
+you can simply pass in a reference to a scalar containing the SQL:
+
+    sql => \"update mytable set foo='bar';",
 
 =item *
 
@@ -98,6 +105,7 @@ sub create {
 
     $dbh
 };
+*run= \&create;
 
 =head2 C<< DBIx::RunSQL->run_sql_file ARGS >>
 
