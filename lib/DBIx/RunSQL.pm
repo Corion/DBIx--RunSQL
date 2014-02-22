@@ -156,7 +156,7 @@ C<verbose_fh> - filehandle to write to instead of C<STDOUT>
 =cut
 
 sub run_sql_file {
-    my ($class,%args) = @_;
+    my ($self,%args) = @_;
     my $errors = 0;
     my @sql;
     {
@@ -213,19 +213,31 @@ sub run_sql_file {
                 };
             } elsif( 0 < $sth->{NUM_OF_FIELDS} ) {
                 # SELECT statement, output results
-                my @columns= @{ $sth->{NAME} };
-
-                my $res= $sth->fetchall_arrayref( {} );
-                if( @columns ) {
-                    print join( "\t", @columns )."\n";
-                    for( @$res ) {
-                        print join( "\t", @{$_}{ @columns } )."\n";
-                    };
-                };
+                $self->output_sth( $sth );
             };
         };
     };
     $errors
+}
+
+sub output_sth {
+    my( $self, $sth )= @_;
+    my @columns= @{ $sth->{NAME} };
+
+    my $res= $sth->fetchall_arrayref();
+    if( @columns ) {
+        if( require "Text/Table.pm" ) {
+            my $t= Text::Table->new(@columns);
+            $t->load( @$res );
+            print "$t";
+        } else {
+            # Output as print statement
+            print join( "\t", @columns )."\n";
+            for( @$res ) {
+                print join( "\t", @$_ )."\n";
+            };
+        };
+    };
 }
 
 sub parse_command_line {
