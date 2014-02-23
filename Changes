@@ -1,6 +1,7 @@
 0.12 20140222
     + If Text::Table is installed, output SELECT statements
       through it instead of simply using \t
+    . Document more of the internal helper routines
 
 0.11 20131120
     + Add functionality for SELECT statements

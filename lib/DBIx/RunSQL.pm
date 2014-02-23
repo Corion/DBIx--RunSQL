@@ -24,7 +24,7 @@ DBIx::RunSQL - run SQL from a file
         force   => 1,
         verbose => 1,
     );
-    
+
     ... # run your tests with a DB setup fresh from setup.sql
 
 =head1 METHODS
@@ -97,7 +97,7 @@ sub create {
         $dbh = DBI->connect($args{dsn}, $args{user}, $args{password}, {})
             or die "Couldn't connect to DSN '$args{dsn}' : " . DBI->errstr;
     };
-    
+
     $self->run_sql_file(
         dbh => $dbh,
         %args,
@@ -110,7 +110,7 @@ sub create {
 =head2 C<< DBIx::RunSQL->run_sql_file ARGS >>
 
     my $dbh = DBI->connect(...)
-    
+
     for my $file (sort glob '*.sql') {
         DBIx::RunSQL->run_sql_file(
             verbose => 1,
@@ -162,11 +162,72 @@ sub run_sql_file {
     {
         open my $fh, "<", $args{sql}
             or die "Couldn't read '$args{sql}' : $!";
-        local $/;
-        @sql = split /;\r?\n/, <$fh> # potentially this should become C<< $/ = ";\n"; >>
+        # potentially this should become C<< $/ = ";\n"; >>
         # and a while loop to handle large SQL files
+        local $/;
+        $args{ sql }= <$fh>; # sluuurp
     };
-    
+
+    $self->run_sql(
+        %args
+    );
+}
+
+=head2 C<< DBIx::RunSQL->run_sql ARGS >>
+
+    my $dbh = DBI->connect(...)
+
+    for my $file (sort glob '*.sql') {
+        DBIx::RunSQL->run_sql_file(
+            verbose => 1,
+            dbh     => $dbh,
+            sql     => 'create table foo',
+        );
+    };
+
+Runs an SQL string on a prepared database handle.
+Returns the number of errors encountered.
+
+If the statement returns rows, these are printed
+separated with tabs.
+
+=over 4
+
+=item *
+
+C<dbh> - a premade database handle
+
+=item *
+
+C<sql> - string or array reference containing the SQL statements
+
+=item *
+
+C<force> - continue even if errors are encountered
+
+=item *
+
+C<verbose> - print each SQL statement as it is run
+
+=item *
+
+C<verbose_handler> - callback to call with each SQL statement instead of C<print>
+
+=item *
+
+C<verbose_fh> - filehandle to write to instead of C<STDOUT>
+
+=back
+
+=cut
+
+sub run_sql {
+    my ($self,%args) = @_;
+    my $errors = 0;
+    my @sql= 'ARRAY' eq ref $args{ sql }
+             ? @{ $args{ sql }}
+             : $args{ sql };
+
     $args{ verbose_handler } ||= sub {
         $args{ verbose_fh } ||= \*main::STDOUT;
         print { $args{ verbose_fh } } "$_[0]\n";
@@ -176,24 +237,10 @@ sub run_sql_file {
     # Because we blindly split above on /;\n/
     # we need to reconstruct multi-line CREATE TRIGGER statements here again
     my $trigger;
-    for my $statement (@sql) {
+    for my $statement ($self->split_sql( $args{ sql })) {
         # skip "statements" that consist only of comments
         next unless $statement =~ /^\s*[A-Z][A-Z]/mi;
-        
-        if( $statement =~ /^\s*CREATE\s+TRIGGER\b/i ) {
-            $trigger = $statement;
-            next
-                if( $statement !~ /END$/i );
-            $statement = $trigger;
-            undef $trigger;
-        } elsif( $trigger ) {
-            $trigger .= ";\n$statement";
-            next
-                if( $statement !~ /END$/i );
-            $statement = $trigger;
-            undef $trigger;
-        };
-        
+
         $status->($statement) if $args{verbose};
 
         my $sth = $args{dbh}->prepare($statement);
@@ -213,40 +260,20 @@ sub run_sql_file {
                 };
             } elsif( 0 < $sth->{NUM_OF_FIELDS} ) {
                 # SELECT statement, output results
-                $self->output_sth( $sth );
+                print $self->format_results( $sth );
             };
         };
     };
     $errors
 }
 
-sub output_sth {
-    my( $self, $sth )= @_;
-    my @columns= @{ $sth->{NAME} };
-
-    my $res= $sth->fetchall_arrayref();
-    if( @columns ) {
-        if( require "Text/Table.pm" ) {
-            my $t= Text::Table->new(@columns);
-            $t->load( @$res );
-            print "$t";
-        } else {
-            # Output as print statement
-            print join( "\t", @columns )."\n";
-            for( @$res ) {
-                print join( "\t", @$_ )."\n";
-            };
-        };
-    };
-}
-
 sub parse_command_line {
     my ($package,$appname,@argv) =  @_;
     require Getopt::Long; Getopt::Long->import();
     require Pod::Usage; Pod::Usage->import();
-    
+
     if (! @argv) { @argv = @ARGV };
-    
+
     local @ARGV = @argv;
     if (GetOptions(
         'user:s' => \my $user,
@@ -275,24 +302,142 @@ sub parse_command_line {
 
 sub handle_command_line {
     my ($package,$appname,@argv) =  @_;
-    
+
     my $opts = $package->parse_command_line($appname,@argv)
         or pod2usage(2);
     pod2usage(1) if $opts->{help};
     pod2usage(-verbose => 2) if $opts->{man};
-    
+
     $opts->{dsn} ||= sprintf 'dbi:SQLite:dbname=db/%s.sqlite', $appname;
-    
+
     $package->create(
         %$opts
     );
+}
+
+=head2 C<< DBIx::RunSQL->format_results %options >>
+
+  my $sth= $dbh->prepare( 'select * from foo' );
+  $sth->execute();
+  print DBIx::RunSQL->format_results( sth => $sth );
+
+Executes C<< $sth->fetchall_arrayref >> and returns
+the results either as tab separated string
+or formatted using L<Text::Table> if the module is available.
+
+If you find yourself using this often to create reports,
+you may really want to look at L<Querylet> instead.
+
+=over 4
+
+=item *
+
+C<sth> - the executed statement handle
+
+=item *
+
+C<formatter> - if you want to force C<tab> or C<Text::Table>
+usage, you can do it through that parameter.
+In fact, the module will use anything other than C<tab>
+as the class name and assume that the interface is compatible
+to C<Text::Table>.
+
+=back
+
+Note that the query results are returned as one large string,
+so you really do not want to run this for large(r) result
+sets.
+
+=cut
+
+sub format_results {
+    my( $self, %options )= @_;
+    my $sth= delete $options{ sth };
+
+    if( ! exists $options{ formatter }) {
+        if( eval { require "Text/Table.pm" }) {
+            $options{ formatter }= 'Text::Table';
+        } else {
+            $options{ formatter }= 'tab';
+        };
+    };
+
+    my @columns= @{ $sth->{NAME} };
+    my $res= $sth->fetchall_arrayref();
+    my $result='';
+    if( @columns ) {
+        # Output as print statement
+        if( 'tab' eq $options{ formatter } ) {
+            $result = join "\n",
+                          join( "\t", @columns ),
+                          map { join( "\t", @$_ ) } @$res
+                      ;
+        } else {
+            my $t= $options{formatter}->new(@columns);
+            $t->load( @$res );
+            $result= $t;
+        };
+    };
+    "$result"; # Yes, sorry - we stringify everything
+}
+
+=head2 C<< DBIx::RunSQL->split_sql ARGS >>
+
+  my @statements= DBIx::RunSQL->split_sql( <<'SQL');
+      create table foo (name varchar(64));
+      create trigger foo_insert on foo before insert;
+          new.name= 'foo-'||old.name;
+      end;
+      insert into foo name values ('bar');
+  SQL
+  # Returns three elements
+
+This is a helper subroutine to split a sequence of (semicolon-newline-delimited)
+SQL statements into separate statements. It is documented because
+it is not a very smart subroutine and you might want to
+override or replace it. It might also be useful outside the context
+of L<DBIx::RunSQL> if you need to split up a large blob
+of SQL statements into smaller pieces.
+
+The subroutine needs the whole sequence of SQL statements in memory.
+If you are attempting to restore a large SQL dump backup into your
+database, this approach might not be suitable.
+
+=cut
+
+sub split_sql {
+    my( $self, $sql )= @_;
+    my @sql = split /;\r?\n/, $sql;
+
+    # Because we blindly split above on /;\n/
+    # we need to reconstruct multi-line CREATE TRIGGER statements here again
+    my @res;
+    my $trigger;
+    for my $statement (@sql) {
+        if( $statement =~ /^\s*CREATE\s+TRIGGER\b/i ) {
+            $trigger = $statement;
+            next
+                if( $statement !~ /END$/i );
+            $statement = $trigger;
+            undef $trigger;
+        } elsif( $trigger ) {
+            $trigger .= ";\n$statement";
+            next
+                if( $statement !~ /END$/i );
+            $statement = $trigger;
+            undef $trigger;
+        };
+        push @res, $statement;
+    };
+
+    @res
 }
 
 1;
 
 =head1 PROGRAMMER USAGE
 
-This module abstracts away the "run these SQL statements to set up 
+This module abstracts away the "run these SQL statements to set up
 your database" into a module. In some situations you want to give the
 setup SQL to a database admin, but in other situations, for example testing,
 you want to run the SQL statements against an in-memory database. This
@@ -400,7 +545,7 @@ L<ORLite::Migrate>
 
 =head1 REPOSITORY
 
-The public repository of this module is 
+The public repository of this module is
 L<http://github.com/Corion/DBIx--RunSQL>.
 
 =head1 SUPPORT
@@ -420,7 +565,7 @@ Max Maischein C<corion@cpan.org>
 
 =head1 COPYRIGHT (c)
 
-Copyright 2009-2013 by Max Maischein C<corion@cpan.org>.
+Copyright 2009-2014 by Max Maischein C<corion@cpan.org>.
 
 =head1 LICENSE
 
