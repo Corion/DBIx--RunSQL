@@ -260,7 +260,7 @@ sub run_sql {
                 };
             } elsif( 0 < $sth->{NUM_OF_FIELDS} ) {
                 # SELECT statement, output results
-                print $self->format_results( $sth );
+                print $self->format_results( sth => $sth );
             };
         };
     };
