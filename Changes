@@ -1,3 +1,7 @@
+0.13 20150519
+    + Fix bad thinko error in ->run_sql that prevented any
+      results from being shown
+
 0.12 20140222
     + If Text::Table is installed, output SELECT statements
       through it instead of simply using \t
