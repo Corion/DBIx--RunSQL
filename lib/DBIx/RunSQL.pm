@@ -151,6 +151,14 @@ C<verbose_handler> - callback to call with each SQL statement instead of C<print
 
 C<verbose_fh> - filehandle to write to instead of C<STDOUT>
 
+=item *
+
+C<output_bool> - whether to exit with a nonzero exit code if any row is found
+
+=item *
+
+C<output_string> - whether to output the (one) row and column, without any headers
+
 =back
 
 =cut
@@ -189,7 +197,7 @@ Runs an SQL string on a prepared database handle.
 Returns the number of errors encountered.
 
 If the statement returns rows, these are printed
-separated with tabs.
+separated with tabs, but see the C<output_bool> and C<output_string> options.
 
 =over 4
 
@@ -216,6 +224,14 @@ C<verbose_handler> - callback to call with each SQL statement instead of C<print
 =item *
 
 C<verbose_fh> - filehandle to write to instead of C<STDOUT>
+
+=item *
+
+C<output_bool> - whether to exit with a nonzero exit code if any row is found
+
+=item *
+
+C<output_string> - whether to output the (one) row and column, without any headers
 
 =back
 
@@ -260,7 +276,18 @@ sub run_sql {
                 };
             } elsif( 0 < $sth->{NUM_OF_FIELDS} ) {
                 # SELECT statement, output results
-                print $self->format_results( sth => $sth );
+                if( $args{ output_bool }) {
+                    my $res = $self->format_results( sth => $sth, no_header_when_empty => 1, %args );
+                    print $res;
+                    $errors = length $res;
+                    
+                } elsif( $args{ output_string }) {
+                    local $self->{formatter} = 'tab';
+                    print $self->format_results( sth => $sth, headers => 0, %args );
+
+                } else {
+                    print $self->format_results( sth => $sth, %args );
+                };
             };
         };
     };
@@ -282,16 +309,20 @@ sub parse_command_line {
         'verbose' => \my $verbose,
         'force|f' => \my $force,
         'sql:s' => \my $sql,
+        'bool' => \my $output_bool,
+        'string' => \my $output_string,
         'help|h' => \my $help,
         'man' => \my $man,
     )) {
-        return {
+h        return {
         user     => $user,
         password => $password,
         dsn      => $dsn,
         verbose  => $verbose,
         force    => $force,
         sql      => $sql,
+        output_bool => $output_bool,
+        output_string => $output_string,
         help     => $help,
         man      => $man,
         };
@@ -310,7 +341,7 @@ sub handle_command_line {
 
     $opts->{dsn} ||= sprintf 'dbi:SQLite:dbname=db/%s.sqlite', $appname;
 
-    $package->create(
+    exit $package->create(
         %$opts
     );
 }
@@ -363,15 +394,21 @@ sub format_results {
     };
 
     my @columns= @{ $sth->{NAME} };
+    my $no_header_when_empty = $options{ no_header_when_empty };
+    my $print_header = not exists $options{ header } || $options{ header };
     my $res= $sth->fetchall_arrayref();
     my $result='';
     if( @columns ) {
         # Output as print statement
-        if( 'tab' eq $options{ formatter } ) {
+        if( $no_header_when_empty and ! @$res ) {
+            # Nothing to do
+
+        } elsif( 'tab' eq $options{ formatter } ) {
             $result = join "\n",
-                          join( "\t", @columns ),
+                          $print_header ? join( "\t", @columns ) : (),
                           map { join( "\t", @$_ ) } @$res
                       ;
+            
         } else {
             my $t= $options{formatter}->new(@columns);
             $t->load( @$res );

@@ -89,6 +89,12 @@ METHODS
 
       * verbose_fh - filehandle to write to instead of STDOUT
 
+      * output_bool - whether to exit with a nonzero exit code if any row
+      is found
+
+      * output_string - whether to output the (one) row and column, without
+      any headers
+
  DBIx::RunSQL->run_sql ARGS
 
         my $dbh = DBI->connect(...)
@@ -104,7 +110,8 @@ METHODS
     Runs an SQL string on a prepared database handle. Returns the number of
     errors encountered.
 
-    If the statement returns rows, these are printed separated with tabs.
+    If the statement returns rows, these are printed separated with tabs,
+    but see the output_bool and output_string options.
 
       * dbh - a premade database handle
 
@@ -118,6 +125,12 @@ METHODS
       of print
 
       * verbose_fh - filehandle to write to instead of STDOUT
+
+      * output_bool - whether to exit with a nonzero exit code if any row
+      is found
+
+      * output_string - whether to output the (one) row and column, without
+      any headers
 
  DBIx::RunSQL->format_results %options
 
