@@ -315,7 +315,11 @@ sub parse_command_line {
         'help|h' => \my $help,
         'man' => \my $man,
     )) {
-h        return {
+        no warnings 'newline';
+        if( $sql and ! -f $sql ) {
+            $sql = \"$sql",
+        };
+        return {
         user     => $user,
         password => $password,
         dsn      => $dsn,
