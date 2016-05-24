@@ -275,7 +275,7 @@ sub run_sql {
                 } else {
                     warn "[SQL ERROR]: $statement\n";
                 };
-            } elsif( 0 < $sth->{NUM_OF_FIELDS} ) {
+            } elsif( defined $sth->{NUM_OF_FIELDS} and 0 < $sth->{NUM_OF_FIELDS} ) {
                 # SELECT statement, output results
                 if( $args{ output_bool }) {
                     my $res = $self->format_results( sth => $sth, no_header_when_empty => 1, %args );
