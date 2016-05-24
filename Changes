@@ -1,3 +1,9 @@
+0.14 20160524
+    + ->handle_command_line now also accepts an SQL string
+      instead of only accepting SQL files
+    . Silence some warnings if a statement does not return columns
+      (like a CREATE statement). RT #114647
+
 0.13 20150519
     + Fix bad thinko error in ->run_sql that prevented any
       results from being shown

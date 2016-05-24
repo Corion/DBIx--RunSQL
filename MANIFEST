@@ -13,6 +13,7 @@ t/01-force.t
 t/02-trigger.t
 t/03-comment.t
 t/04-handle-parameters.t
+t/05-output-bool.t
 t/05-select.t
 t/rt77378.sql
 t/rt77378.t
