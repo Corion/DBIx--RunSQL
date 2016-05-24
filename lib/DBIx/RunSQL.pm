@@ -3,7 +3,7 @@ use strict;
 use DBI;
 
 use vars qw($VERSION);
-$VERSION = '0.13';
+$VERSION = '0.14';
 
 =head1 NAME
 
@@ -53,7 +53,7 @@ be read until exhaustion.  B<not implemented>
 
 This allows to create SQL-as-programs as follows:
 
-  #!/usr/bin/perl -w -MDBIx::RunSQL=create
+  #!/usr/bin/perl -w -MDBIx::RunSQL -e 'create()'
   create table ...
 
 If you want to run SQL statements from a scalar,
@@ -230,6 +230,9 @@ C<verbose_fh> - filehandle to write to instead of C<STDOUT>
 
 C<output_bool> - whether to exit with a nonzero exit code if any row is found
 
+This makes the function return a nonzero value even if there is no error
+but a row was found.
+
 =item *
 
 C<output_string> - whether to output the (one) row and column, without any headers
@@ -257,7 +260,6 @@ sub run_sql {
     for my $statement ($self->split_sql( $args{ sql })) {
         # skip "statements" that consist only of comments
         next unless $statement =~ /^\s*[A-Z][A-Z]/mi;
-
         $status->($statement) if $args{verbose};
 
         my $sth = $args{dbh}->prepare($statement);
@@ -608,7 +610,7 @@ Max Maischein C<corion@cpan.org>
 
 =head1 COPYRIGHT (c)
 
-Copyright 2009-2014 by Max Maischein C<corion@cpan.org>.
+Copyright 2009-2016 by Max Maischein C<corion@cpan.org>.
 
 =head1 LICENSE
 
