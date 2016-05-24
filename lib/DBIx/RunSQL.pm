@@ -33,7 +33,9 @@ DBIx::RunSQL - run SQL from a file
 
 =head2 C<< DBIx::RunSQL->run ARGS >>
 
-Runs the SQL commands and returns the database handle
+Runs the SQL commands and returns the database handle.
+In list context, it returns the database handle and the
+suggested exit code.
 
 =over 4
 
@@ -89,7 +91,6 @@ C<verbose_fh> - filehandle to write to instead of C<STDOUT>
 
 sub create {
     my ($self,%args) = @_;
-
     $args{sql} ||= 'sql/create.sql';
 
     my $dbh = delete $args{ dbh };
@@ -98,14 +99,13 @@ sub create {
             or die "Couldn't connect to DSN '$args{dsn}' : " . DBI->errstr;
     };
 
-    $self->run_sql_file(
+    my $errors = $self->run_sql_file(
         dbh => $dbh,
         %args,
     );
-
-    $dbh
+    return wantarray ? ($dbh, $errors) : $dbh;
 };
-*run= \&create;
+*run = *run = \&create;
 
 =head2 C<< DBIx::RunSQL->run_sql_file ARGS >>
 
@@ -155,6 +155,9 @@ C<verbose_fh> - filehandle to write to instead of C<STDOUT>
 
 C<output_bool> - whether to exit with a nonzero exit code if any row is found
 
+This makes the function return a nonzero value even if there is no error
+but a row was found.
+
 =item *
 
 C<output_string> - whether to output the (one) row and column, without any headers
@@ -165,7 +168,6 @@ C<output_string> - whether to output the (one) row and column, without any heade
 
 sub run_sql_file {
     my ($self,%args) = @_;
-    my $errors = 0;
     my @sql;
     {
         open my $fh, "<", $args{sql}
@@ -175,7 +177,6 @@ sub run_sql_file {
         local $/;
         $args{ sql }= <$fh>; # sluuurp
     };
-
     $self->run_sql(
         %args
     );
@@ -279,7 +280,7 @@ sub run_sql {
                 if( $args{ output_bool }) {
                     my $res = $self->format_results( sth => $sth, no_header_when_empty => 1, %args );
                     print $res;
-                    $errors = length $res;
+                    $errors = length $res > 0;
                     
                 } elsif( $args{ output_string }) {
                     local $self->{formatter} = 'tab';
@@ -340,10 +341,10 @@ sub handle_command_line {
     pod2usage(-verbose => 2) if $opts->{man};
 
     $opts->{dsn} ||= sprintf 'dbi:SQLite:dbname=db/%s.sqlite', $appname;
-
-    exit $package->create(
+    my( $dbh, $exitcode) = $package->create(
         %$opts
     );
+    return $exitcode
 }
 
 =head2 C<< DBIx::RunSQL->format_results %options >>
@@ -487,7 +488,8 @@ looks like this:
     use lib 'lib';
     use DBIx::RunSQL;
 
-    DBIx::RunSQL->handle_command_line('myapp');
+    my $exitcode = DBIx::RunSQL->handle_command_line('myapp');
+    exit $exitcode;
 
     =head1 NAME
 
