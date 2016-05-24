@@ -24,4 +24,4 @@ resources:
   bugtracker: http://rt.cpan.org/Public/Dist/Display.html?Name=DBIx-RunSQL
   license: http://dev.perl.org/licenses/
   repository: http://github.com/Corion/dbix--runsql
-version: '0.13'
+version: '0.14'

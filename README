@@ -24,7 +24,8 @@ METHODS
 
  DBIx::RunSQL->run ARGS
 
-    Runs the SQL commands and returns the database handle
+    Runs the SQL commands and returns the database handle. In list context,
+    it returns the database handle and the suggested exit code.
 
       * sql - name of the file containing the SQL statements
 
@@ -38,7 +39,7 @@ METHODS
 
       This allows to create SQL-as-programs as follows:
 
-        #!/usr/bin/perl -w -MDBIx::RunSQL=create
+        #!/usr/bin/perl -w -MDBIx::RunSQL -e 'create()'
         create table ...
 
       If you want to run SQL statements from a scalar, you can simply pass
@@ -92,6 +93,9 @@ METHODS
       * output_bool - whether to exit with a nonzero exit code if any row
       is found
 
+      This makes the function return a nonzero value even if there is no
+      error but a row was found.
+
       * output_string - whether to output the (one) row and column, without
       any headers
 
@@ -128,6 +132,9 @@ METHODS
 
       * output_bool - whether to exit with a nonzero exit code if any row
       is found
+
+      This makes the function return a nonzero value even if there is no
+      error but a row was found.
 
       * output_string - whether to output the (one) row and column, without
       any headers
@@ -192,7 +199,8 @@ PROGRAMMER USAGE
         use lib 'lib';
         use DBIx::RunSQL;
     
-        DBIx::RunSQL->handle_command_line('myapp');
+        my $exitcode = DBIx::RunSQL->handle_command_line('myapp');
+        exit $exitcode;
     
         =head1 NAME
     
@@ -307,7 +315,7 @@ AUTHOR
 
 COPYRIGHT (c)
 
-    Copyright 2009-2014 by Max Maischein corion@cpan.org.
+    Copyright 2009-2016 by Max Maischein corion@cpan.org.
 
 LICENSE
 
