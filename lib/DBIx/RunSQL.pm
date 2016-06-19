@@ -451,13 +451,14 @@ database, this approach might not be suitable.
 
 sub split_sql {
     my( $self, $sql )= @_;
-    my @sql = split /;\r?\n/, $sql;
+    my @sql = split /;[ \t]*\r?\n/, $sql;
 
     # Because we blindly split above on /;\n/
     # we need to reconstruct multi-line CREATE TRIGGER statements here again
     my @res;
     my $trigger;
     for my $statement (@sql) {
+        next unless $statement =~ /\S/;
         if( $statement =~ /^\s*CREATE\s+TRIGGER\b/i ) {
             $trigger = $statement;
             next
