@@ -3,7 +3,7 @@ use strict;
 use DBI;
 
 use vars qw($VERSION);
-$VERSION = '0.14';
+$VERSION = '0.15';
 
 =head1 NAME
 

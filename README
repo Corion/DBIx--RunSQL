@@ -37,7 +37,7 @@ METHODS
       If sql is undefined, the $::DATA or the 0 filehandle will be read
       until exhaustion. not implemented
 
-      This allows to create SQL-as-programs as follows:
+      This allows one to create SQL-as-programs as follows:
 
         #!/usr/bin/perl -w -MDBIx::RunSQL -e 'create()'
         create table ...
