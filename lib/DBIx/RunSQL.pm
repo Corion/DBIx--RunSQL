@@ -51,7 +51,7 @@ the SQL will be read from that. B<not implemented>
 If C<sql> is undefined, the C<$::DATA> or the C<0> filehandle will
 be read until exhaustion.  B<not implemented>
 
-This allows to create SQL-as-programs as follows:
+This allows one to create SQL-as-programs as follows:
 
   #!/usr/bin/perl -w -MDBIx::RunSQL -e 'create()'
   create table ...
