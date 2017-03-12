@@ -15,7 +15,6 @@ DBIx::RunSQL - run SQL from a file
 
     #!/usr/bin/perl -w
     use strict;
-    use lib 'lib';
     use DBIx::RunSQL;
 
     my $test_dbh = DBIx::RunSQL->create(
