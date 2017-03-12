@@ -185,10 +185,16 @@ looks like this:
 
     create-db.pl - Create the database
 
+    =head1 SYNOPSIS
+
+      create-db.pl "select * from mytable where 1=0"
+
     =head1 ABSTRACT
 
     This sets up the database. The following
     options are recognized:
+
+    =head1 OPTIONS
 
     =over 4
 
@@ -213,6 +219,8 @@ looks like this:
     =item C<--help>
 
     Show this message.
+
+    =back
 
     =cut
 

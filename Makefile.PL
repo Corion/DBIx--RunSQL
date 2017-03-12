@@ -4,12 +4,28 @@
 use ExtUtils::MakeMaker;
 # See lib/ExtUtils/MakeMaker.pm for details of how to influence
 # the contents of the Makefile that is written.
-WriteMakefile1(
+
+# Normalize version strings like 6.30_02 to 6.3002,
+# so that we can do numerical comparisons on it.
+my $eumm_version = $ExtUtils::MakeMaker::VERSION;
+$eumm_version =~ s/_//;
+
+my $module = 'DBIx::RunSQL';
+(my $main_file = "lib/$module.pm" ) =~ s!::!/!g;
+(my $distname = $module) =~ s!::!-!g;
+
+my @tests = map { glob $_ } 't/*.t', 't/*/*.t';
+
+my %module = (
     MIN_PERL_VERSION => '5.006',
     META_MERGE => {
         resources => {
-            repository => 'http://github.com/Corion/dbix--runsql',
-            bugtracker => 'http://rt.cpan.org/Public/Dist/Display.html?Name=DBIx-RunSQL',
+            repository => {
+                web => 'https://github.com/Corion/dbix--runsql',
+                url => 'git://github.com/Corion/dbix--runsql.git',
+                type => 'git',
+            },
+            bugtracker => 'http://rt.cpan.org/Public/Dist/Display.html?Name=' . $distname,
             license    => 'http://dev.perl.org/licenses/',
         },
     },
@@ -23,7 +39,15 @@ WriteMakefile1(
     AUTHOR          => 'Max Maischein <corion@cpan.org>',
 );
 
-1;
+
+sub get_module_info { %module }
+
+if( ! caller ) {
+    # I should maybe use something like Shipwright...
+    regen_README($main_file);
+    #regen_EXAMPLES();
+    WriteMakefile1(get_module_info);
+};
 
 sub WriteMakefile1 {  #Written by Alexandr Ciornii, version 0.21. Added by eumm-upgrade.
     my %params=@_;
@@ -72,3 +96,5 @@ sub regen_README {
         print $fh $parser->as_markdown;
     };
 }
+
+1;
