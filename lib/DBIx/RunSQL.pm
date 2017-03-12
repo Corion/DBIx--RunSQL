@@ -283,7 +283,7 @@ sub run_sql {
                     my $res = $self->format_results( sth => $sth, no_header_when_empty => 1, %args );
                     print $res;
                     $errors = length $res > 0;
-                    
+
                 } elsif( $args{ output_string }) {
                     local $self->{formatter} = 'tab';
                     print $self->format_results( sth => $sth, headers => 0, %args );
@@ -415,7 +415,7 @@ sub format_results {
                           $print_header ? join( "\t", @columns ) : (),
                           map { join( "\t", @$_ ) } @$res
                       ;
-            
+
         } else {
             my $t= $options{formatter}->new(@columns);
             $t->load( @$res );
@@ -502,10 +502,16 @@ looks like this:
 
     create-db.pl - Create the database
 
+    =head1 SYNOPSIS
+
+      create-db.pl "select * from mytable where 1=0"
+
     =head1 ABSTRACT
 
     This sets up the database. The following
     options are recognized:
+
+    =head1 OPTIONS
 
     =over 4
 
@@ -530,6 +536,8 @@ looks like this:
     =item C<--help>
 
     Show this message.
+
+    =back
 
     =cut
 
