@@ -3,7 +3,7 @@ use strict;
 use DBI;
 
 use vars qw($VERSION);
-$VERSION = '0.15';
+$VERSION = '0.16';
 
 =head1 NAME
 
@@ -305,32 +305,34 @@ sub parse_command_line {
 
     local @ARGV = @argv;
     if (GetOptions(
-        'user:s' => \my $user,
+        'user:s'     => \my $user,
         'password:s' => \my $password,
-        'dsn:s' => \my $dsn,
-        'verbose' => \my $verbose,
-        'force|f' => \my $force,
-        'sql:s' => \my $sql,
-        'bool' => \my $output_bool,
-        'string' => \my $output_string,
-        'help|h' => \my $help,
-        'man' => \my $man,
+        'dsn:s'      => \my $dsn,
+        'verbose'    => \my $verbose,
+        'force|f'    => \my $force,
+        'sql:s'      => \my $sql,
+        'bool'       => \my $output_bool,
+        'string'     => \my $output_string,
+        'format:s'   => \my $formatter_class,
+        'help|h'     => \my $help,
+        'man'        => \my $man,
     )) {
         no warnings 'newline';
         if( $sql and ! -f $sql ) {
             $sql = \"$sql",
         };
         return {
-        user     => $user,
-        password => $password,
-        dsn      => $dsn,
-        verbose  => $verbose,
-        force    => $force,
-        sql      => $sql,
-        output_bool => $output_bool,
+        user          => $user,
+        password      => $password,
+        dsn           => $dsn,
+        verbose       => $verbose,
+        force         => $force,
+        sql           => $sql,
+        output_bool   => $output_bool,
         output_string => $output_string,
-        help     => $help,
-        man      => $man,
+        formatter     => $formatter_class,
+        help          => $help,
+        man           => $man,
         };
     } else {
         return undef;
@@ -391,7 +393,7 @@ sub format_results {
     my( $self, %options )= @_;
     my $sth= delete $options{ sth };
 
-    if( ! exists $options{ formatter }) {
+    if( ! $options{ formatter }) {
         if( eval { require "Text/Table.pm" }) {
             $options{ formatter }= 'Text::Table';
         } else {
@@ -549,6 +551,7 @@ passes the following command line arguments to C<< ->create >>:
   --password
   --dsn
   --sql
+  --format
   --force
   --verbose
 
@@ -618,7 +621,7 @@ Max Maischein C<corion@cpan.org>
 
 =head1 COPYRIGHT (c)
 
-Copyright 2009-2016 by Max Maischein C<corion@cpan.org>.
+Copyright 2009-2017 by Max Maischein C<corion@cpan.org>.
 
 =head1 LICENSE
 

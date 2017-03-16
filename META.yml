@@ -7,7 +7,7 @@ build_requires:
 configure_requires:
   ExtUtils::MakeMaker: '0'
 dynamic_config: 1
-generated_by: 'ExtUtils::MakeMaker version 6.98, CPAN::Meta::Converter version 2.142060'
+generated_by: 'ExtUtils::MakeMaker version 7.24, CPAN::Meta::Converter version 2.143240'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -23,5 +23,4 @@ requires:
 resources:
   bugtracker: http://rt.cpan.org/Public/Dist/Display.html?Name=DBIx-RunSQL
   license: http://dev.perl.org/licenses/
-  repository: http://github.com/Corion/dbix--runsql
-version: '0.15'
+version: '0.16'

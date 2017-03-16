@@ -6,7 +6,6 @@ DBIx::RunSQL - run SQL from a file
 
     #!/usr/bin/perl -w
     use strict;
-    use lib 'lib';
     use DBIx::RunSQL;
 
     my $test_dbh = DBIx::RunSQL->create(
@@ -233,6 +232,7 @@ passes the following command line arguments to `->create`:
     --password
     --dsn
     --sql
+    --format
     --force
     --verbose
 
@@ -302,7 +302,7 @@ Max Maischein `corion@cpan.org`
 
 # COPYRIGHT (c)
 
-Copyright 2009-2016 by Max Maischein `corion@cpan.org`.
+Copyright 2009-2017 by Max Maischein `corion@cpan.org`.
 
 # LICENSE
 

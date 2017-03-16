@@ -6,7 +6,6 @@ SYNOPSIS
 
         #!/usr/bin/perl -w
         use strict;
-        use lib 'lib';
         use DBIx::RunSQL;
     
         my $test_dbh = DBIx::RunSQL->create(
@@ -254,6 +253,7 @@ PROGRAMMER USAGE
       --password
       --dsn
       --sql
+      --format
       --force
       --verbose
 
@@ -323,7 +323,7 @@ AUTHOR
 
 COPYRIGHT (c)
 
-    Copyright 2009-2016 by Max Maischein corion@cpan.org.
+    Copyright 2009-2017 by Max Maischein corion@cpan.org.
 
 LICENSE
 
