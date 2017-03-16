@@ -1,6 +1,6 @@
 #!perl -w
 use strict;
-use Test::More tests => 1;
+use Test::More;
 
 use DBIx::RunSQL;
 
@@ -11,7 +11,10 @@ my $can_run = eval {
 
 if (not $can_run) {
     plan skip_all => "Text::Table not installed: $@";
-}
+    exit;
+};
+
+plan tests => 1;
 
 my $sql= <<'SQL';
     create table foo (
@@ -41,7 +44,11 @@ is_deeply [split /\r?\n/, $result],
 
 package Text::Table::JIRA;
 use strict;
-use parent 'Text::Table';
+use vars '@ISA';
+require Text::Table;
+BEGIN {
+    @ISA = 'Text::Table';
+}
 
 sub new {
     my( $class, @headers ) = @_;
