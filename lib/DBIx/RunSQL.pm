@@ -294,64 +294,6 @@ sub run_sql {
     $errors
 }
 
-sub parse_command_line {
-    my ($package,$appname,@argv) =  @_;
-    require Getopt::Long; Getopt::Long->import();
-    require Pod::Usage; Pod::Usage->import();
-
-    if (! @argv) { @argv = @ARGV };
-
-    local @ARGV = @argv;
-    if (GetOptions(
-        'user:s'     => \my $user,
-        'password:s' => \my $password,
-        'dsn:s'      => \my $dsn,
-        'verbose'    => \my $verbose,
-        'force|f'    => \my $force,
-        'sql:s'      => \my $sql,
-        'bool'       => \my $output_bool,
-        'string'     => \my $output_string,
-        'format:s'   => \my $formatter_class,
-        'help|h'     => \my $help,
-        'man'        => \my $man,
-    )) {
-        no warnings 'newline';
-        if( $sql and ! -f $sql ) {
-            $sql = \"$sql",
-        };
-        return {
-        user          => $user,
-        password      => $password,
-        dsn           => $dsn,
-        verbose       => $verbose,
-        force         => $force,
-        sql           => $sql,
-        output_bool   => $output_bool,
-        output_string => $output_string,
-        formatter     => $formatter_class,
-        help          => $help,
-        man           => $man,
-        };
-    } else {
-        return undef;
-    };
-}
-
-sub handle_command_line {
-    my ($package,$appname,@argv) =  @_;
-
-    my $opts = $package->parse_command_line($appname,@argv)
-        or pod2usage(2);
-    pod2usage(1) if $opts->{help};
-    pod2usage(-verbose => 2) if $opts->{man};
-
-    $opts->{dsn} ||= sprintf 'dbi:SQLite:dbname=db/%s.sqlite', $appname;
-    my( $dbh, $exitcode) = $package->create(
-        %$opts
-    );
-    return $exitcode
-}
-
 =head2 C<< DBIx::RunSQL->format_results %options >>
 
   my $sth= $dbh->prepare( 'select * from foo' );
@@ -479,6 +421,104 @@ sub split_sql {
 
 1;
 
+=head2 C<< DBIx::RunSQL->parse_command_line >>
+
+    my $options = DBIx::RunSQL->parse_command_line( 'my_application', @ARGV );
+
+Helper function to turn a command line array into options for DBIx::RunSQL
+invocations.
+
+=cut
+
+sub parse_command_line {
+    my ($package,$appname,@argv) =  @_;
+    require Getopt::Long; Getopt::Long->import();
+    require Pod::Usage; Pod::Usage->import();
+
+    if (! @argv) { @argv = @ARGV };
+
+    local @ARGV = @argv;
+    if (GetOptions(
+        'user:s'     => \my $user,
+        'password:s' => \my $password,
+        'dsn:s'      => \my $dsn,
+        'verbose'    => \my $verbose,
+        'force|f'    => \my $force,
+        'sql:s'      => \my $sql,
+        'bool'       => \my $output_bool,
+        'string'     => \my $output_string,
+        'format:s'   => \my $formatter_class,
+        'help|h'     => \my $help,
+        'man'        => \my $man,
+    )) {
+        no warnings 'newline';
+        if( $sql and ! -f $sql ) {
+            $sql = \"$sql",
+        };
+        return {
+        user          => $user,
+        password      => $password,
+        dsn           => $dsn,
+        verbose       => $verbose,
+        force         => $force,
+        sql           => $sql,
+        output_bool   => $output_bool,
+        output_string => $output_string,
+        formatter     => $formatter_class,
+        help          => $help,
+        man           => $man,
+        };
+    } else {
+        return undef;
+    };
+}
+
+sub handle_command_line {
+    my ($package,$appname,@argv) =  @_;
+
+    my $opts = $package->parse_command_line($appname,@argv)
+        or pod2usage(2);
+    pod2usage(1) if $opts->{help};
+    pod2usage(-verbose => 2) if $opts->{man};
+
+    $opts->{dsn} ||= sprintf 'dbi:SQLite:dbname=db/%s.sqlite', $appname;
+    my( $dbh, $exitcode) = $package->create(
+        %$opts
+    );
+    return $exitcode
+}
+
+=head2 C<< DBIx::RunSQL->handle_command_line >>
+
+    DBIx::RunSQL->handle_command_line( 'my_application', @ARGV );
+
+Helper function to run the module functionality from the command line. See below
+how to use this function in a good self-contained script.
+This function
+passes the following command line arguments and options to C<< ->create >>:
+
+  --user
+  --password
+  --dsn
+  --sql
+  --format
+  --force
+  --verbose
+  --bool
+  --string
+
+In addition, it handles the following switches through L<Pod::Usage>:
+
+  --help
+  --man
+
+If no dsn is given, this function will use
+C< dbi:SQLite:dbname=db/$appname.sqlite >
+as the default database.
+
+See also the section PROGRAMMER USAGE for a sample program to set
+up a database from an SQL file.
+
 =head1 PROGRAMMER USAGE
 
 This module abstracts away the "run these SQL statements to set up
@@ -491,7 +531,6 @@ looks like this:
 
     #!/usr/bin/perl -w
     use strict;
-    use lib 'lib';
     use DBIx::RunSQL;
 
     my $exitcode = DBIx::RunSQL->handle_command_line('myapp');
@@ -528,6 +567,23 @@ looks like this:
     The alternative SQL file to use
     instead of C<sql/create.sql>.
 
+    =item C<--bool>
+
+    Set the exit code to 1 if at least one result row was found
+
+    =item C<--string>
+
+    Output the (single) column that the query returns as a string without
+    any headers
+
+    =item C<--format> formatter
+
+    Use a different formatter for table output. Supported formatters are
+
+      tab - output results as tab delimited columns
+
+      Text::Table - output results as ASCII table
+
     =item C<--force>
 
     Don't stop on errors
@@ -539,27 +595,6 @@ looks like this:
     =back
 
     =cut
-
-=head2 C<< DBIx::RunSQL->handle_command_line >>
-
-Parses the command line. This is a convenience method, which
-passes the following command line arguments to C<< ->create >>:
-
-  --user
-  --password
-  --dsn
-  --sql
-  --format
-  --force
-  --verbose
-
-In addition, it handles the following switches through L<Pod::Usage>:
-
-  --help
-  --man
-
-See also the section PROGRAMMER USAGE for a sample program to set
-up a database from an SQL file.
 
 =head1 NOTES
 
