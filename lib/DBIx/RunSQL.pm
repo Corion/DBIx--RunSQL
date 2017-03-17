@@ -185,13 +185,11 @@ sub run_sql_file {
 
     my $dbh = DBI->connect(...)
 
-    for my $file (sort glob '*.sql') {
-        DBIx::RunSQL->run_sql_file(
-            verbose => 1,
-            dbh     => $dbh,
-            sql     => 'create table foo',
-        );
-    };
+    DBIx::RunSQL->run_sql(
+        verbose => 1,
+        dbh     => $dbh,
+        sql     => \@sql_statements,
+    );
 
 Runs an SQL string on a prepared database handle.
 Returns the number of errors encountered.
