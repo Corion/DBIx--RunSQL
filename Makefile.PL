@@ -19,28 +19,31 @@ my @tests = map { glob $_ } 't/*.t', 't/*/*.t';
 my %module = (
     MIN_PERL_VERSION => '5.006',
     META_MERGE => {
+        "meta-spec" => { version => 2 },
         resources => {
             repository => {
                 web => 'https://github.com/Corion/dbix--runsql',
                 url => 'git://github.com/Corion/dbix--runsql.git',
                 type => 'git',
             },
-            bugtracker => 'http://rt.cpan.org/Public/Dist/Display.html?Name=' . $distname,
-            license    => 'http://dev.perl.org/licenses/',
+            bugtracker  => {
+              web    => 'http://rt.cpan.org/Public/Dist/Display.html?Name='.$distname,
+              mailto => $distname.'-bugs@rt.cpan.org',
+            },
+            license    => ['http://dev.perl.org/licenses/'],
         },
         dynamic_config   => 0, # we promise to keep META.* up-to-date
         x_static_install => 1, # we are pure Perl and don't do anything fancy
     },
-    'NAME'          => 'DBIx::RunSQL',
+    'NAME'          => $module,
     'LICENSE'       => 'perl',
-    'VERSION_FROM'  => 'lib/DBIx/RunSQL.pm', # finds $VERSION
+    'VERSION_FROM'  => $main_file, # finds $VERSION
     'PREREQ_PM'     => {
                         'DBI' => 0,
                       }, # e.g., Module::Name => 1.1
-    ABSTRACT_FROM   => 'lib/DBIx/RunSQL.pm', # retrieve abstract from module
+    ABSTRACT_FROM   => $main_file, # retrieve abstract from module
     AUTHOR          => 'Max Maischein <corion@cpan.org>',
 );
-
 
 sub get_module_info { %module }
 

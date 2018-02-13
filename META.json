@@ -4,13 +4,13 @@
       "Max Maischein <corion@cpan.org>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "ExtUtils::MakeMaker version 7.24, CPAN::Meta::Converter version 2.143240",
+   "generated_by" : "ExtUtils::MakeMaker version 7.24, CPAN::Meta::Converter version 2.150010",
    "license" : [
       "perl_5"
    ],
    "meta-spec" : {
       "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
-      "version" : "2"
+      "version" : 2
    },
    "name" : "DBIx-RunSQL",
    "no_index" : {
@@ -40,12 +40,19 @@
    "release_status" : "stable",
    "resources" : {
       "bugtracker" : {
+         "mailto" : "DBIx-RunSQL-bugs@rt.cpan.org",
          "web" : "http://rt.cpan.org/Public/Dist/Display.html?Name=DBIx-RunSQL"
       },
       "license" : [
          "http://dev.perl.org/licenses/"
-      ]
+      ],
+      "repository" : {
+         "type" : "git",
+         "url" : "git://github.com/Corion/dbix--runsql.git",
+         "web" : "https://github.com/Corion/dbix--runsql"
+      }
    },
    "version" : "0.16",
+   "x_serialization_backend" : "JSON::PP version 2.94",
    "x_static_install" : 1
 }
