@@ -432,13 +432,12 @@ invocations.
 
 sub parse_command_line {
     my ($package,$appname,@argv) =  @_;
-    require Getopt::Long; Getopt::Long->import();
+    require Getopt::Long; Getopt::Long->import('GetOptionsFromArray');
     require Pod::Usage; Pod::Usage->import();
 
     if (! @argv) { @argv = @ARGV };
 
-    local @ARGV = @argv;
-    if (GetOptions(
+    if (GetOptionsFromArray( \@argv,
         'user:s'     => \my $user,
         'password:s' => \my $password,
         'dsn:s'      => \my $dsn,
