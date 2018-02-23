@@ -2,7 +2,7 @@
 use strict;
 use DBIx::RunSQL;
 
-my $exitcode = DBIx::RunSQL->handle_command_line('myapp');
+my $exitcode = DBIx::RunSQL->handle_command_line('myapp', \@ARGV);
 exit $exitcode;
 
 =head1 NAME

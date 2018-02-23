@@ -423,21 +423,24 @@ sub split_sql {
 
 =head2 C<< DBIx::RunSQL->parse_command_line >>
 
-    my $options = DBIx::RunSQL->parse_command_line( 'my_application', @ARGV );
+    my $options = DBIx::RunSQL->parse_command_line( 'my_application', \@ARGV );
 
 Helper function to turn a command line array into options for DBIx::RunSQL
-invocations.
+invocations. The array of command line items is modified in-place.
+
+If the reference to the array of command line items is missing, C<@ARGV>
+will be modified instead.
 
 =cut
 
 sub parse_command_line {
-    my ($package,$appname,@argv) =  @_;
+    my ($package,$appname,$argv) =  @_;
     require Getopt::Long; Getopt::Long->import('GetOptionsFromArray');
     require Pod::Usage; Pod::Usage->import();
 
-    if (! @argv) { @argv = @ARGV };
+    if (! $argv) { $argv = \@ARGV };
 
-    if (GetOptionsFromArray( \@argv,
+    if (GetOptionsFromArray( $argv,
         'user:s'     => \my $user,
         'password:s' => \my $password,
         'dsn:s'      => \my $dsn,
@@ -473,9 +476,9 @@ sub parse_command_line {
 }
 
 sub handle_command_line {
-    my ($package,$appname,@argv) =  @_;
+    my ($package,$appname,$argv) =  @_;
 
-    my $opts = $package->parse_command_line($appname,@argv)
+    my $opts = $package->parse_command_line($appname,$argv)
         or pod2usage(2);
     pod2usage(1) if $opts->{help};
     pod2usage(-verbose => 2) if $opts->{man};
@@ -489,7 +492,7 @@ sub handle_command_line {
 
 =head2 C<< DBIx::RunSQL->handle_command_line >>
 
-    DBIx::RunSQL->handle_command_line( 'my_application', @ARGV );
+    DBIx::RunSQL->handle_command_line( 'my_application', \@ARGV );
 
 Helper function to run the module functionality from the command line. See below
 how to use this function in a good self-contained script.
@@ -500,6 +503,7 @@ passes the following command line arguments and options to C<< ->create >>:
   --password
   --dsn
   --sql
+  --quiet
   --format
   --force
   --verbose
@@ -532,7 +536,7 @@ looks like this:
     use strict;
     use DBIx::RunSQL;
 
-    my $exitcode = DBIx::RunSQL->handle_command_line('myapp');
+    my $exitcode = DBIx::RunSQL->handle_command_line('myapp', \@ARGV);
     exit $exitcode;
 
     =head1 NAME
