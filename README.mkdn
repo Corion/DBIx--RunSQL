@@ -1,3 +1,6 @@
+
+[![Build Status](https://travis-ci.org/Corion/App-scrape.svg?branch=master)](https://github.com/Corion/App-scrape)
+
 # NAME
 
 DBIx::RunSQL - run SQL from a file
