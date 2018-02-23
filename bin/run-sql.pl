@@ -36,6 +36,10 @@ the database
 The alternative SQL file to use
 instead of what is passed on the command line.
 
+=item C<--quiet>
+
+Output no headers for empty SELECT resultsets
+
 =item C<--bool>
 
 Set the exit code to 1 if at least one result row was found

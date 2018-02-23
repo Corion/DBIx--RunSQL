@@ -144,7 +144,8 @@ C<verbose> - print each SQL statement as it is run
 
 =item *
 
-C<verbose_handler> - callback to call with each SQL statement instead of C<print>
+C<verbose_handler> - callback to call with each SQL statement instead of
+C<print>
 
 =item *
 
@@ -159,7 +160,8 @@ but a row was found.
 
 =item *
 
-C<output_string> - whether to output the (one) row and column, without any headers
+C<output_string> - whether to output the (one) row and column, without any
+headers
 
 =back
 
@@ -277,13 +279,21 @@ sub run_sql {
             } elsif( defined $sth->{NUM_OF_FIELDS} and 0 < $sth->{NUM_OF_FIELDS} ) {
                 # SELECT statement, output results
                 if( $args{ output_bool }) {
-                    my $res = $self->format_results( sth => $sth, no_header_when_empty => 1, %args );
+                    my $res = $self->format_results(
+                        sth => $sth,
+                        no_header_when_empty => 1,
+                        %args
+                    );
                     print $res;
                     $errors = length $res > 0;
 
                 } elsif( $args{ output_string }) {
-                    local $self->{formatter} = 'tab';
-                    print $self->format_results( sth => $sth, headers => 0, %args );
+                    local $args{formatter} = 'tab';
+                    print $self->format_results(
+                        sth => $sth,
+                        no_header_when_empty => 1,
+                        %args
+                    );
 
                 } else {
                     print $self->format_results( sth => $sth, %args );
@@ -449,6 +459,7 @@ sub parse_command_line {
         'sql:s'      => \my $sql,
         'bool'       => \my $output_bool,
         'string'     => \my $output_string,
+        'quiet'      => \my $no_header_when_empty,
         'format:s'   => \my $formatter_class,
         'help|h'     => \my $help,
         'man'        => \my $man,
@@ -458,17 +469,18 @@ sub parse_command_line {
             $sql = \"$sql",
         };
         return {
-        user          => $user,
-        password      => $password,
-        dsn           => $dsn,
-        verbose       => $verbose,
-        force         => $force,
-        sql           => $sql,
-        output_bool   => $output_bool,
-        output_string => $output_string,
-        formatter     => $formatter_class,
-        help          => $help,
-        man           => $man,
+        user                 => $user,
+        password             => $password,
+        dsn                  => $dsn,
+        verbose              => $verbose,
+        force                => $force,
+        sql                  => $sql,
+        no_header_when_empty => $no_header_when_empty,
+        output_bool          => $output_bool,
+        output_string        => $output_string,
+        formatter            => $formatter_class,
+        help                 => $help,
+        man                  => $man,
         };
     } else {
         return undef;
@@ -569,6 +581,10 @@ looks like this:
 
     The alternative SQL file to use
     instead of C<sql/create.sql>.
+
+    =item C<--quiet>
+
+    Output no headers for empty SELECT resultsets
 
     =item C<--bool>
 
