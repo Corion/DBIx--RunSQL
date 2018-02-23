@@ -3,6 +3,8 @@
 	  now take an arrayREF for the command line items and modify that arrayref.
 	+ new "--quiet" / no_header_when_empty option to allow scripts to run
 	  from cron without producing too much output
+	+ new "run-sql.pl" script in the distribution as a template or tool script
+	  for running SQL commands.
 
 0.16 20170316
     + Allow specifying the table formatter on the command line

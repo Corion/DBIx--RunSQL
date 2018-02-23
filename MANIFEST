@@ -1,4 +1,5 @@
 .gitignore
+bin/run-sql.pl
 Changes
 lib/DBIx/RunSQL.pm
 Makefile.PL
