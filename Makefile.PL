@@ -88,7 +88,7 @@ sub regen_README {
         my $readme = join "\n",
             pod_section($_[0], 'NAME', 'no heading' ),
             pod_section($_[0], 'DESCRIPTION' ),
-            <<INSTALL,
+            <<EOD,
 
 INSTALLATION
 
@@ -107,7 +107,7 @@ Should you wish to install this module manually, the procedure is
   make test
   make install
 
-INSTALL
+EOD
             pod_section($_[0], 'REPOSITORY'),
             pod_section($_[0], 'SUPPORT'),
             pod_section($_[0], 'BUG TRACKER'),

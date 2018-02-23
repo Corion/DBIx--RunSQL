@@ -25,7 +25,6 @@ t/trigger.sql
 xt/99-changes.t
 xt/99-compile.t
 xt/99-manifest.t
-xt/99-minimumversion.t
 xt/99-pod.t
 xt/99-synopsis.t
 xt/99-todo.t
