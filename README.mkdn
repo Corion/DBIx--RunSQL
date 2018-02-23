@@ -76,14 +76,16 @@ separated with tabs.
 - `sql` - name of the file containing the SQL statements
 - `force` - continue even if errors are encountered
 - `verbose` - print each SQL statement as it is run
-- `verbose_handler` - callback to call with each SQL statement instead of `print`
+- `verbose_handler` - callback to call with each SQL statement instead of
+`print`
 - `verbose_fh` - filehandle to write to instead of `STDOUT`
 - `output_bool` - whether to exit with a nonzero exit code if any row is found
 
     This makes the function return a nonzero value even if there is no error
     but a row was found.
 
-- `output_string` - whether to output the (one) row and column, without any headers
+- `output_string` - whether to output the (one) row and column, without any
+headers
 
 ## `DBIx::RunSQL->run_sql ARGS`
 
@@ -162,14 +164,17 @@ database, this approach might not be suitable.
 
 ## `DBIx::RunSQL->parse_command_line`
 
-    my $options = DBIx::RunSQL->parse_command_line( 'my_application', @ARGV );
+    my $options = DBIx::RunSQL->parse_command_line( 'my_application', \@ARGV );
 
 Helper function to turn a command line array into options for DBIx::RunSQL
-invocations.
+invocations. The array of command line items is modified in-place.
+
+If the reference to the array of command line items is missing, `@ARGV`
+will be modified instead.
 
 ## `DBIx::RunSQL->handle_command_line`
 
-    DBIx::RunSQL->handle_command_line( 'my_application', @ARGV );
+    DBIx::RunSQL->handle_command_line( 'my_application', \@ARGV );
 
 Helper function to run the module functionality from the command line. See below
 how to use this function in a good self-contained script.
@@ -180,6 +185,7 @@ passes the following command line arguments and options to `->create`:
     --password
     --dsn
     --sql
+    --quiet
     --format
     --force
     --verbose
@@ -212,7 +218,7 @@ looks like this:
     use strict;
     use DBIx::RunSQL;
 
-    my $exitcode = DBIx::RunSQL->handle_command_line('myapp');
+    my $exitcode = DBIx::RunSQL->handle_command_line('myapp', \@ARGV);
     exit $exitcode;
 
     =head1 NAME
@@ -245,6 +251,10 @@ looks like this:
 
     The alternative SQL file to use
     instead of C<sql/create.sql>.
+
+    =item C<--quiet>
+
+    Output no headers for empty SELECT resultsets
 
     =item C<--bool>
 
