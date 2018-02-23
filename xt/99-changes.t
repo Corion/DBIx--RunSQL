@@ -13,7 +13,7 @@ release date is mentioned as well
 =cut
 
 use vars '%module';
-require 'Makefile.PL';
+require './Makefile.PL';
 # Loaded from Makefile.PL
 %module = get_module_info();
 my $module = $module{NAME};
