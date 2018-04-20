@@ -1,3 +1,7 @@
+0.19
+    + Read SQL from STDIN if not given on the command line
+	  This allows run-sql.pl to be used in a pipe
+
 0.18
     + List the Getopt::Long version we need
 
