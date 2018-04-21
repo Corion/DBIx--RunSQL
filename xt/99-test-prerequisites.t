@@ -25,7 +25,7 @@ BEGIN {
         require Test::Without::Module;
         require Capture::Tiny;
         Capture::Tiny->import('capture');
-        use Path::Class;
+        require Path::Class;
         Path::Class->import('dir');
     };
     if (my $err = $@) {
