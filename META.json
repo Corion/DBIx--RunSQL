@@ -36,6 +36,12 @@
             "Getopt::Long" : "2.36",
             "perl" : "5.006"
          }
+      },
+      "test" : {
+         "requires" : {
+            "Data::Dumper" : "0",
+            "Test::More" : "0"
+         }
       }
    },
    "release_status" : "stable",
