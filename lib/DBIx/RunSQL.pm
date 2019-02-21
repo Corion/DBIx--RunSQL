@@ -1,5 +1,6 @@
 package DBIx::RunSQL;
 use strict;
+use warnings;
 use DBI;
 use Module::Load 'load';
 
