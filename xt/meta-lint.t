@@ -11,8 +11,8 @@ use Parse::CPAN::Meta;
 use CPAN::Meta::Validator;
 
 use lib '.';
+require './Makefile.PL';
 use vars '%module';
-require 'Makefile.PL';
 # Loaded from Makefile.PL
 %module = get_module_info();
 my $module = $module{NAME};
