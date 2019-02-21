@@ -12,9 +12,8 @@ use CPAN::Meta::Validator;
 
 use lib '.';
 require './Makefile.PL';
-use vars '%module';
 # Loaded from Makefile.PL
-%module = get_module_info();
+our %module = get_module_info();
 my $module = $module{NAME};
 
 (my $file = $module) =~ s!::!/!g;
