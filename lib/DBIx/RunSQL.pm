@@ -2,8 +2,7 @@ package DBIx::RunSQL;
 use strict;
 use DBI;
 
-use vars qw($VERSION);
-$VERSION = '0.20';
+our $VERSION = '0.20';
 
 =head1 NAME
 

@@ -2,6 +2,8 @@
 use strict;
 use DBIx::RunSQL;
 
+our $VERSION = '0.20';
+
 my $exitcode = DBIx::RunSQL->handle_command_line('myapp', \@ARGV);
 exit $exitcode;
 
