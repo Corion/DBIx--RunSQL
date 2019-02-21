@@ -1,6 +1,7 @@
 package DBIx::RunSQL;
 use strict;
 use DBI;
+use Module::Load 'load';
 
 our $VERSION = '0.20';
 
@@ -373,9 +374,19 @@ sub format_results {
                       ;
 
         } else {
-            my $t= $options{formatter}->new(@columns);
-            $t->load( @$res );
-            $result= $t;
+            my $class = $options{ formatter };
+            load $class;
+            if( !$class->isa('Text::Table') and my $table = $class->can('table') ) {
+                # Text::Table::Any interface
+                $result = $table->( header_row => 1,
+                    rows => [\@columns, @$res ],
+                );
+            } else {;
+                # Text::Table interface
+                my $t= $options{formatter}->new(@columns);
+                $t->load( @$res );
+                $result= $t;
+            };
         };
     };
     "$result"; # Yes, sorry - we stringify everything

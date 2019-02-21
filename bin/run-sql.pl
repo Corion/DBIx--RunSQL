@@ -63,6 +63,8 @@ Use a different formatter for table output. Supported formatters are
 
   Text::Table - output results as ASCII table
 
+  Text::Table::Any - output results as various formats
+
 =item C<--force>
 
 Don't stop on errors
