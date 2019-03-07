@@ -376,7 +376,9 @@ sub format_results {
 
         } else {
             my $class = $options{ formatter };
-            load $class;
+            if( !( $class->can('table') || $class->can('new'))) {
+                load $class;
+            };
             if( !$class->isa('Text::Table') and my $table = $class->can('table') ) {
                 # Text::Table::Any interface
                 $result = $table->( header_row => 1,
