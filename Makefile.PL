@@ -31,8 +31,8 @@ my %module = (
                 type => 'git',
             },
             bugtracker  => {
-              web    => 'http://rt.cpan.org/Public/Dist/Display.html?Name='.$distname,
-              mailto => $distname.'-bugs@rt.cpan.org',
+              web    => 'http://rt.cpan.org/Public/Dist/Display.html?Name='.$distbase,
+              mailto => $distbase.'-bugs@rt.cpan.org',
             },
             license    => ['http://dev.perl.org/licenses/'],
         },
