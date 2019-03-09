@@ -1,5 +1,6 @@
 
-[![Build Status](https://travis-ci.org/Corion/App-scrape.svg?branch=master)](https://github.com/Corion/App-scrape)
+[![Travis Build Status](https://travis-ci.org/Corion/DBIx-RunSQL.svg?branch=master)](https://travis-ci.org/Corion/DBIx-RunSQL)
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/Corion/DBIx-RunSQL?branch=master&svg=true)](https://ci.appveyor.com/project/Corion/DBIx-RunSQL)
 
 # NAME
 
