@@ -377,10 +377,14 @@ sub format_results {
         } else {
             my $class = $options{ formatter };
 
-            # Try to load the module, just in case it isn't present in
-            # memory already
-            eval { load $class; };
+            if( !( $class->can('table') || $class->can('new'))) {
+                # Try to load the module, just in case it isn't present in
+                # memory already
 
+                eval { load $class; };
+            };
+            
+            # Now dispatch according to the apparent type
             if( !$class->isa('Text::Table') and my $table = $class->can('table') ) {
                 # Text::Table::Any interface
                 $result = $table->( header_row => 1,
