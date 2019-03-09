@@ -6,7 +6,8 @@ use DBIx::RunSQL;
 use Data::Dumper;
 
 my $have_scalar_open = eval {
-    require 5.8; # for scalar open
+    require 5.008; # for scalar open
+    require DBD::SQLite;
     1;  
 };
 
@@ -52,7 +53,7 @@ is ${$options{ sql }}, "sql 2 on command line", "SQL on the command line gets re
 
 SKIP: {
     if( ! $have_scalar_open ) {
-        skip "No scalar open on this version of Perl", 4;
+        skip "No scalar open on this version of Perl", 3;
     };
     { open *STDIN, '<', \'sql from STDIN';
     DBIx::RunSQL->handle_command_line(
