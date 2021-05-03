@@ -685,6 +685,9 @@ or potentially L<DBIx::SQLHandler>.
 
 L<ORLite::Migrate>
 
+L<Test::SQLite> - SQLite setup/teardown for tests, mostly geared towards
+testing, not general database setup
+
 =head1 REPOSITORY
 
 The public repository of this module is

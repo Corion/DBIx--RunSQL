@@ -328,6 +328,9 @@ or potentially [DBIx::SQLHandler](https://metacpan.org/pod/DBIx::SQLHandler).
 
 [ORLite::Migrate](https://metacpan.org/pod/ORLite::Migrate)
 
+[Test::SQLite](https://metacpan.org/pod/Test::SQLite) - SQLite setup/teardown for tests, mostly geared towards
+testing, not general database setup
+
 # REPOSITORY
 
 The public repository of this module is

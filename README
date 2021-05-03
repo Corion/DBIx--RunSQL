@@ -43,6 +43,9 @@ SEE ALSO
 
 L<ORLite::Migrate>
 
+L<Test::SQLite> - SQLite setup/teardown for tests, mostly geared towards
+testing, not general database setup
+
 AUTHOR
 
 Max Maischein C<corion@cpan.org>
