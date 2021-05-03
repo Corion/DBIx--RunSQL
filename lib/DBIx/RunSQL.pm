@@ -4,7 +4,7 @@ use warnings;
 use DBI;
 use Module::Load 'load';
 
-our $VERSION = '0.21';
+our $VERSION = '0.22';
 
 =head1 NAME
 
