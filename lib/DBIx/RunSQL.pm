@@ -23,6 +23,7 @@ DBIx::RunSQL - run SQL from a file
         sql     => 'sql/create.sql',
         force   => 1,
         verbose => 1,
+        formatter => 'Text::Table',
     );
 
     # now run your tests with a DB setup fresh from setup.sql
@@ -170,6 +171,10 @@ but a row was found.
 C<output_string> - whether to output the (one) row and column, without any
 headers
 
+=item *
+
+C<formatter> - see the C<<formatter>> option of C<< ->format_results >>
+
 =back
 
 =cut
@@ -245,6 +250,10 @@ but a row was found.
 
 C<output_string> - whether to output the (one) row and column, without any headers
 
+=item *
+
+C<formatter> - see the C<<formatter>> option of C<< ->format_results >>
+
 =back
 
 =cut
@@ -294,6 +303,9 @@ sub run_sql {
                         %args
                     );
                     print $res;
+                    # Set the exit code depending on the length of $res because
+                    # we lost the information on how many rows the result
+                    # set had ...
                     $errors = length $res > 0;
 
                 } elsif( $args{ output_string }) {
@@ -385,7 +397,7 @@ sub format_results {
 
                 eval { load $class; };
             };
-            
+
             # Now dispatch according to the apparent type
             if( !$class->isa('Text::Table') and my $table = $class->can('table') ) {
                 # Text::Table::Any interface
