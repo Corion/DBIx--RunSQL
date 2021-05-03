@@ -31,10 +31,10 @@ my %module = (
                 type => 'git',
             },
             bugtracker  => {
-              web    => 'http://rt.cpan.org/Public/Dist/Display.html?Name='.$distbase,
+              web    => 'https://rt.cpan.org/Public/Dist/Display.html?Name='.$distbase,
               mailto => $distbase.'-bugs@rt.cpan.org',
             },
-            license    => ['http://dev.perl.org/licenses/'],
+            license    => ['https://dev.perl.org/licenses/'],
         },
         dynamic_config   => 0, # we promise to keep META.* up-to-date
         x_static_install => 1, # we are pure Perl and don't do anything fancy
@@ -131,7 +131,7 @@ tool you use to manage your installation of Perl, e.g. any of
   cpan  .
   cpanp -i .
 
-Consult http://www.cpan.org/modules/INSTALL.html for further instruction.
+Consult https://www.cpan.org/modules/INSTALL.html for further instruction.
 Should you wish to install this module manually, the procedure is
 
   perl Makefile.PL

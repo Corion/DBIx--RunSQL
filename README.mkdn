@@ -331,12 +331,12 @@ or potentially [DBIx::SQLHandler](https://metacpan.org/pod/DBIx::SQLHandler).
 # REPOSITORY
 
 The public repository of this module is
-[http://github.com/Corion/DBIx--RunSQL](http://github.com/Corion/DBIx--RunSQL).
+[https://github.com/Corion/DBIx--RunSQL](https://github.com/Corion/DBIx--RunSQL).
 
 # SUPPORT
 
 The public support forum of this module is
-[http://perlmonks.org/](http://perlmonks.org/).
+[https://perlmonks.org/](https://perlmonks.org/).
 
 # BUG TRACKER
 
@@ -350,7 +350,7 @@ Max Maischein `corion@cpan.org`
 
 # COPYRIGHT (c)
 
-Copyright 2009-2018 by Max Maischein `corion@cpan.org`.
+Copyright 2009-2021 by Max Maischein `corion@cpan.org`.
 
 # LICENSE
 

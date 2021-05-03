@@ -688,12 +688,12 @@ L<ORLite::Migrate>
 =head1 REPOSITORY
 
 The public repository of this module is
-L<http://github.com/Corion/DBIx--RunSQL>.
+L<https://github.com/Corion/DBIx--RunSQL>.
 
 =head1 SUPPORT
 
 The public support forum of this module is
-L<http://perlmonks.org/>.
+L<https://perlmonks.org/>.
 
 =head1 BUG TRACKER
 
@@ -707,7 +707,7 @@ Max Maischein C<corion@cpan.org>
 
 =head1 COPYRIGHT (c)
 
-Copyright 2009-2018 by Max Maischein C<corion@cpan.org>.
+Copyright 2009-2021 by Max Maischein C<corion@cpan.org>.
 
 =head1 LICENSE
 
