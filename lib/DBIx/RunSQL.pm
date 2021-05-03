@@ -63,7 +63,7 @@ you can simply pass in a reference to a scalar containing the SQL:
 
 =item *
 
-C<dsn>, C<user>, C<password> - DBI parameters for connecting to the DB
+C<dsn>, C<user>, C<password>, C<options> - DBI parameters for connecting to the DB
 
 =item *
 
@@ -93,9 +93,11 @@ sub create {
     my ($self,%args) = @_;
     $args{sql} ||= 'sql/create.sql';
 
+    $args{options} ||= {};
+
     my $dbh = delete $args{ dbh };
     if (! $dbh) {
-        $dbh = DBI->connect($args{dsn}, $args{user}, $args{password}, {})
+        $dbh = DBI->connect($args{dsn}, $args{user}, $args{password}, $args{options})
             or die "Couldn't connect to DSN '$args{dsn}' : " . DBI->errstr;
     };
 
