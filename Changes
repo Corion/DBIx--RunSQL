@@ -3,7 +3,6 @@
     * Move URLs to https://
     * Documentation updates
 
-
 0.21 2019-03-09
     * Use Module::Load to load renderers
     * Check if a class isa Text::Table, otherwise dispatch to Text::Table::Any
