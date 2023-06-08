@@ -1,3 +1,7 @@
+0.23 2023-06-08
+    * Add "rotate" option to rotate the output by 90°
+    * Add "null" option for custom strings for NULL values (instead of blank)
+
 0.22 2021-05-03
     * Allow pass-through of DBI database options for ->create()
     * Move URLs to https://
