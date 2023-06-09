@@ -23,13 +23,13 @@ requires:
   DBI: '0'
   Getopt::Long: '2.36'
   Module::Load: '0'
-  perl: '5.006'
+  perl: '5.010'
   strict: '0'
   warnings: '0'
 resources:
   bugtracker: https://rt.cpan.org/Public/Dist/Display.html?Name=DBIx-RunSQL
   license: https://dev.perl.org/licenses/
   repository: git://github.com/Corion/DBIx-RunSQL.git
-version: '0.23'
+version: '0.24'
 x_serialization_backend: 'CPAN::Meta::YAML version 0.018'
 x_static_install: 1

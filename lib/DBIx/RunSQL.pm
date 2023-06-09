@@ -4,7 +4,7 @@ use warnings;
 use DBI;
 use Module::Load 'load';
 
-our $VERSION = '0.23';
+our $VERSION = '0.24';
 
 =encoding utf8
 
@@ -409,7 +409,7 @@ sub format_results {
         };
     };
 
-    my $nullstr = $options{ null } // '';
+    my $nullstr = $options{ null } // ''; # / , for Filter::Simple
 
     my @columns= @{ $sth->{NAME} };
     my $res= $sth->fetchall_arrayref();
