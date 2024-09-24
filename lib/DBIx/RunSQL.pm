@@ -23,6 +23,7 @@ DBIx::RunSQL - run SQL from a file
     my $test_dbh = DBIx::RunSQL->create(
         dsn       => 'dbi:SQLite:dbname=:memory:',
         sql       => 'sql/create.sql',
+        options   => { PrintError => 0, RaiseError => 1 },
         force     => 1,
         verbose   => 1,
         formatter => 'Text::Table',
