@@ -40,7 +40,7 @@ my %module = (
         x_static_install => 1, # we are pure Perl and don't do anything fancy
     },
 
-    MIN_PERL_VERSION => '5.010',
+    MIN_PERL_VERSION => '5.020', # we use signatures
 
     'EXE_FILES' => [
         'bin/run-sql.pl',
