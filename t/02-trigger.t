@@ -1,6 +1,6 @@
 #!perl -w
 use strict;
-use Test::More;
+use Test2::V0 '-no_srand';
 
 use DBIx::RunSQL;
 

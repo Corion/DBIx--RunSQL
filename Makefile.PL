@@ -60,7 +60,7 @@ my %module = (
                         'Module::Load' => 0,
                       }, # e.g., Module::Name => 1.1
     TEST_REQUIRES => {
-        'Test::More'   => 0,
+        'Test2::V0'    => 0,
         'Data::Dumper' => 0,
     },
 
