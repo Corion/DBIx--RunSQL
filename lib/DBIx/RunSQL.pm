@@ -1,6 +1,7 @@
 package DBIx::RunSQL;
-use strict;
-use warnings;
+use 5.020;
+use experimental 'signatures';
+use stable 'postderef';
 use DBI;
 use Module::Load 'load';
 
