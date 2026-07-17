@@ -521,9 +521,9 @@ sub split_sql {
     my $statement = $iterator->();
     return undef
         if not defined $statement;
-    my $trigger;
 
     if( $statement =~ /^\s*CREATE\s+TRIGGER\b/i ) {
+        my $trigger;
         if( $statement !~ /END$/i ) {
             # Multiline CREATE TRIGGER statement
             $trigger = $statement;
