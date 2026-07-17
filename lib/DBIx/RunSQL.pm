@@ -522,7 +522,7 @@ sub split_sql {
     return undef
         if not defined $statement;
 
-    if( $statement =~ /^\s*CREATE\s+TRIGGER\b/i ) {
+    if( $statement =~ /^\s*CREATE\s+TRIGGER\b/mi ) {
         my $trigger;
         if( $statement !~ /END$/i ) {
             # Multiline CREATE TRIGGER statement
@@ -534,7 +534,7 @@ sub split_sql {
                 $trigger .= ";" if $trigger !~ /;$/;
                 $trigger .= "\n$next"
                     if defined $next;
-            } until (! defined $next or $next =~ /END$/i);
+            } until ((! defined $next) or ($next =~ /END$/i));
         } else {
             # Single-line CREATE TRIGGER statement
             $trigger = $statement;
