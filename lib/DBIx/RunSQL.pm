@@ -537,7 +537,7 @@ sub split_sql {
                         unless $trigger =~ /\n\z/;
                     $trigger .= $next
                 };
-            } until ((! defined $next) or ($next =~ /END$/i));
+            } until ((! defined $next) or ($next =~ /END;?$/i));
         } else {
             # Single-line CREATE TRIGGER statement
             $trigger = $statement;
