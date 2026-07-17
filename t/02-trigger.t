@@ -13,8 +13,6 @@ if (not $can_run) {
     plan skip_all => "SQLite not installed";
 }
 
-plan tests => 2;
-
 my $sql = do { local (@ARGV,$/) = 't/trigger.sql'; <> };
 my @statements;
 while( defined( my $frag = DBIx::RunSQL->split_sql( $sql ))) {
@@ -55,3 +53,5 @@ my $err = $@;
 ok $lives, "We can parse triggers"
     or diag $err;
 is 0+@statements, 4, "We also split a file into 4 statements";
+
+done_testing;
