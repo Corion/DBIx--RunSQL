@@ -532,8 +532,11 @@ sub split_sql {
             do {
                 $next = $iterator->();
                 $trigger .= ";" if $trigger !~ /;$/;
-                $trigger .= "\n$next"
-                    if defined $next;
+                if( defined $next ) {
+                    $trigger .= "\n"
+                        unless $trigger =~ /\n\z/;
+                    $trigger .= $next
+                };
             } until ((! defined $next) or ($next =~ /END$/i));
         } else {
             # Single-line CREATE TRIGGER statement
